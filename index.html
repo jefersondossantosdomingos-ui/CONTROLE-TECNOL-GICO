@@ -349,17 +349,85 @@ details.detalhe-class[open] > summary::before{content:"▾";}
 /* mesmo formato da faixa de versão, mas no alto: o problema é de leitura,
    e o aviso precisa aparecer antes de o operador tentar ler o resto */
 #faixaLargura{
-  position:fixed; left:12px; right:12px; top:calc(12px + var(--safe-t)); z-index:75;
+  /* no fluxo, antes do cabeçalho: empurra o app em vez de cobrir a logo */
   display:none; align-items:center; gap:11px; flex-wrap:wrap;
-  padding:12px 14px; border-radius:var(--radius);
+  padding:calc(12px + var(--safe-t)) 14px 12px;
   background:var(--jt-acento); color:var(--jt-acento-texto);
-  box-shadow:0 10px 30px rgba(8,11,13,.4);
 }
 #faixaLargura.visivel{display:flex;}
 #faixaLargura .txt{flex:1 1 240px; font-size:13.5px; line-height:1.45;}
 #faixaLargura .btn{background:var(--jt-asfalto-900); color:var(--jt-branco);
   border-color:transparent; box-shadow:none;}
+#faixaLargura .medida{display:block; margin-top:4px; font-size:12px; opacity:.75;
+  font-variant-numeric:tabular-nums;}
 @media print{ #faixaLargura{display:none !important;} }
+
+/* ============================================================
+   MODO "SITE PARA COMPUTADOR"
+   O navegador desenha a página com ~1000 px e depois encolhe tudo
+   para caber na tela do celular — o que sai é letra de bula. Não dá
+   para desligar isso pelo app; dá para nascer maior, na mesma
+   proporção em que ele vai encolher, e para desempilhar as colunas
+   que ficariam espremidas.
+   ============================================================ */
+.modo-computador{ --ampliar:2.2; }
+.modo-computador body{ font-size:calc(15px * var(--ampliar)); }
+.modo-computador header h1{ font-size:calc(16.5px * var(--ampliar)); }
+.modo-computador header .sub{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador header img.logo{ height:calc(34px * var(--ampliar)); max-width:none; }
+.modo-computador .btn-tema{ width:calc(44px * var(--ampliar)); height:calc(44px * var(--ampliar)); }
+.modo-computador .btn-tema svg{ width:calc(21px * var(--ampliar)); height:calc(21px * var(--ampliar)); }
+.modo-computador .chip{ font-size:calc(12px * var(--ampliar)); padding:calc(4px * var(--ampliar)) calc(11px * var(--ampliar)); }
+.modo-computador .nav-topo button{ font-size:calc(13.5px * var(--ampliar)); padding:calc(9px * var(--ampliar)) calc(6px * var(--ampliar)); }
+.modo-computador .nav-topo button svg{ width:calc(16px * var(--ampliar)); height:calc(16px * var(--ampliar)); }
+.modo-computador .card > h2{ font-size:calc(16px * var(--ampliar)); }
+.modo-computador .card > h2 .tag{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador label{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador .hint{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador .obrig{ font-size:calc(10px * var(--ampliar)); }
+.modo-computador .calculado{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador input, .modo-computador select, .modo-computador textarea{
+  font-size:calc(16px * var(--ampliar)); min-height:calc(44px * var(--ampliar));
+  padding:calc(11px * var(--ampliar)) calc(12px * var(--ampliar));
+}
+.modo-computador .btn{ font-size:calc(14px * var(--ampliar)); min-height:calc(44px * var(--ampliar));
+  padding:calc(10px * var(--ampliar)) calc(17px * var(--ampliar)); }
+.modo-computador .btn.sm{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador .modo .nome{ font-size:calc(15px * var(--ampliar)); }
+.modo-computador .modo .desc{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador .modo .marca-radio{ width:calc(20px * var(--ampliar)); height:calc(20px * var(--ampliar)); }
+.modo-computador .modo .marca-radio::after{ width:calc(10px * var(--ampliar)); height:calc(10px * var(--ampliar)); }
+.modo-computador .familia{ font-size:calc(14.5px * var(--ampliar)); }
+.modo-computador .familia span{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador .tile .k, .modo-computador .req .k{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador .tile .v{ font-size:calc(22px * var(--ampliar)); }
+.modo-computador .req .v{ font-size:calc(21px * var(--ampliar)); }
+.modo-computador th{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador td{ font-size:calc(15px * var(--ampliar)); }
+.modo-computador td input, .modo-computador td select{
+  font-size:calc(15.5px * var(--ampliar)); width:auto; min-width:calc(84px * var(--ampliar)); }
+.modo-computador .nav-baixo button{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador .nav-baixo button svg{ width:calc(24px * var(--ampliar)); height:calc(24px * var(--ampliar)); }
+.modo-computador .ensaio-salvo .quem b{ font-size:calc(15px * var(--ampliar)); }
+.modo-computador .ensaio-salvo .quem span{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador .ensaio-salvo .numeros .v{ font-size:calc(16.5px * var(--ampliar)); }
+.modo-computador .selo, .modo-computador .badge{ font-size:calc(11px * var(--ampliar)); }
+.modo-computador .foot, .modo-computador summary{ font-size:calc(12.5px * var(--ampliar)); }
+.modo-computador .cabeca-lista{ font-size:calc(13px * var(--ampliar)); }
+.modo-computador .pend .pk{ font-size:calc(13px * var(--ampliar)); }
+.modo-computador .aviso{ font-size:calc(13px * var(--ampliar)); }
+/* o aviso é justamente o que precisa ser lido primeiro */
+.modo-computador #faixaLargura .txt{ font-size:calc(13.5px * var(--ampliar)); }
+.modo-computador #faixaLargura .medida{ font-size:calc(11px * var(--ampliar)); }
+/* com a letra grande, três colunas viram três colunas espremidas */
+.modo-computador .grid2, .modo-computador .grid3, .modo-computador .grid4,
+.modo-computador .modos, .modo-computador #seletorDados{ grid-template-columns:1fr; }
+.modo-computador .grid4 > div{ grid-column:span 1 !important; }
+.modo-computador .familias{ grid-template-columns:repeat(2,1fr); }
+.modo-computador .wrap{ max-width:none; }
+.modo-computador .wide2{ display:block; }
+/* a folha impressa não entra nessa: papel é papel */
+.modo-computador #folhaImpressao, .modo-computador .previa-wrap{ font-size:initial; }
 #faixaVersao .txt{flex:1 1 220px; font-size:13px; line-height:1.45;}
 #faixaVersao .btn{background:var(--jt-acento); color:var(--jt-acento-texto);
   border-color:transparent;}
@@ -887,6 +955,16 @@ summary:hover{color:var(--text);}
 </style>
 </head>
 <body>
+<div id="faixaLargura" role="status">
+  <span class="txt"><b>O navegador está no modo "Site para computador".</b>
+    Por isso a tela veio encolhida. Aumentei a letra para dar para trabalhar, mas
+    o certo é desligar: nos três pontinhos do navegador, desmarque
+    <b>Site para computador</b>. Se o app foi instalado assim, apague o ícone e
+    instale de novo com a opção já desmarcada.
+    <span class="medida" id="larguraMedida"></span></span>
+  <button type="button" class="btn sm" id="btnFecharLargura">Entendi</button>
+</div>
+
 <header>
   <div class="marca">
     <img class="logo" id="logoImg" alt="" style="display:none">
@@ -2389,13 +2467,6 @@ summary:hover{color:var(--text);}
   </p>
 </section>
 
-</div>
-
-<div id="faixaLargura" role="status">
-  <span class="txt"><b>O navegador está no modo "Site para computador".</b>
-    É por isso que as letras saíram miúdas. Nos três pontinhos do navegador,
-    desmarque <b>Site para computador</b> — o app volta ao tamanho de celular.</span>
-  <button type="button" class="btn sm" id="btnFecharLargura">Entendi</button>
 </div>
 
 <div id="faixaVersao" role="status">
@@ -11685,17 +11756,46 @@ $('btnTema').addEventListener('click', () => {
 /* ---- navegador em "Site para computador" ----
    Nesse modo o Chrome ignora a largura do aparelho, desenha a página com
    ~1000 px e encolhe tudo para caber na tela: o app fica com letra de bula.
-   Não há como o app desligar isso — o jeito é avisar onde fica o botão. */
+   O app não consegue desligar isso, mas consegue duas coisas — crescer a
+   letra para continuar legível, e dizer onde fica o botão. */
+
+/**
+ * A primeira versão desta conferência olhava só `pointer: coarse`, e no
+ * modo computador o navegador finge ser um computador — inclusive no
+ * ponteiro. O sinal que ele não consegue disfarçar é a proporção da tela:
+ * aparelho em pé é celular; monitor é deitado.
+ */
+function medirTela() {
+  const retrato = screen.height > screen.width * 1.4;
+  const toque = navigator.maxTouchPoints > 0 || 'ontouchstart' in window
+             || matchMedia('(pointer: coarse)').matches;
+  return {
+    retrato, toque,
+    largura: window.innerWidth,
+    densidade: window.devicePixelRatio,
+    // largo demais para um celular em pé, e sem densidade porque foi encolhido
+    forcado: (retrato || toque) && window.innerWidth >= 700
+             && window.devicePixelRatio < 1.8,
+  };
+}
+
 function conferirModoComputador() {
   const faixa = $('faixaLargura');
   if (!faixa) return;
-  const dedo = matchMedia('(pointer: coarse)').matches;   // é um celular
-  const larga = window.innerWidth >= 700;                  // desenhando como computador
-  const semDensidade = window.devicePixelRatio < 1.5;      // e encolhido para caber
+  const m = medirTela();
+
+  // enquanto o modo estiver ligado, o app cresce para continuar legível
+  document.documentElement.classList.toggle('modo-computador', m.forcado);
+
   let dispensado = false;
   try { dispensado = localStorage.getItem('controle-tecnologico.avisoLargura') === '1'; }
   catch (e) {}
-  faixa.classList.toggle('visivel', dedo && larga && semDensidade && !dispensado);
+  faixa.classList.toggle('visivel', m.forcado && !dispensado);
+
+  const medida = $('larguraMedida');
+  if (medida) medida.textContent =
+    `${Math.round(m.largura)} px de largura · densidade ${m.densidade.toFixed(2)} · `
+    + `tela ${screen.width}×${screen.height}`;
 }
 
 $('btnFecharLargura').addEventListener('click', () => {
