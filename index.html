@@ -1202,6 +1202,8 @@ summary:hover{color:var(--text);}
     </div>
   </div>
 
+  <div id="cardFicha"></div>
+
   <div class="card">
     <h2>Como o cabeçalho vai sair <span class="tag">Prévia</span></h2>
     <div class="previa-wrap" id="mdPreview"></div>
@@ -6398,6 +6400,196 @@ function aplicarMarca() {
 function iniciarMarca() { aplicarMarca(); }
 
 /* ============================================================
+   FICHA GUARDADA
+   A obra, a equipe e o cadastro de equipamentos são os mesmos
+   durante uma medição inteira. Redigitar isso a cada abertura do
+   app é o tipo de trabalho que faz o laboratorista desistir da
+   ferramenta. Aqui ele salva uma vez, e o app repõe sozinho.
+
+   O que NÃO volta: o que identifica o ensaio (registro, estaca) e
+   o que identifica o momento (data, mês, ano). Repor isso faria
+   dois ensaios diferentes virarem o mesmo, e carimbaria a folha
+   com a data errada.
+   ============================================================ */
+
+const CHAVE_PADROES = 'controle-tecnologico.ficha.v1';
+
+const FICHAS = {
+  solos: {
+    nome: 'solos',
+    bloco: 'medicao',
+    naoRepete: ['registro', 'furo', 'dataEnsaio', 'mes', 'ano'],
+    equip: true,          // cilindros, cápsulas e frascos moram em estado.equip
+    conta: 'a obra, o material, a equipe e o cadastro de equipamentos',
+    naoGuarda: 'o registro, a estaca de coleta e a data',
+  },
+  cauq: {
+    nome: 'CAUQ',
+    bloco: 'medicaoCauq',
+    naoRepete: ['registro', 'estaca', 'dataEnsaio'],
+    conta: 'o cliente, os contratos, o projeto da mistura e as origens',
+    naoGuarda: 'o registro, a estaca e a data',
+  },
+  concreto: {
+    nome: 'rompimento do concreto',
+    bloco: 'medicaoConcreto',
+    naoRepete: ['dataEnsaio'],
+    conta: 'o órgão, a obra, os contratos e a equipe',
+    naoGuarda: 'a data — e o RG da peça, que fica na aba do ensaio',
+  },
+  insumos: {
+    nome: 'insumos do concreto',
+    bloco: 'medicaoInsumos',
+    naoRepete: ['registro', 'rg', 'dataEnsaio'],
+    materiais: true,
+    conta: 'a obra, a equipe e o cadastro dos materiais do traço',
+    naoGuarda: 'o registro, o RG e a data',
+  },
+};
+
+/* ------------------------------------------------------------
+   Guardar e repor
+   ------------------------------------------------------------ */
+
+function lerFichas() {
+  try {
+    const bruto = localStorage.getItem(CHAVE_PADROES);
+    return bruto ? JSON.parse(bruto) : {};
+  } catch (e) { return {}; }
+}
+
+function gravarFichas(tudo) {
+  try { localStorage.setItem(CHAVE_PADROES, JSON.stringify(tudo)); return true; }
+  catch (e) { return false; }
+}
+
+/** Copia um objeto deixando de fora as chaves que não se repetem. */
+function semOsQueMudam(origem, fora) {
+  const saida = {};
+  Object.entries(origem || {}).forEach(([k, v]) => {
+    if (!fora.includes(k)) saida[k] = v;
+  });
+  return saida;
+}
+
+/** Guarda a ficha da família pedida com o que está na tela agora. */
+function salvarFicha(chave) {
+  const F = FICHAS[chave];
+  if (!F) return;
+
+  const ficha = { campos: semOsQueMudam(estado[F.bloco], F.naoRepete) };
+
+  if (F.equip) ficha.equip = JSON.parse(JSON.stringify(estado.equip || {}));
+  if (F.materiais) {
+    // só a identidade do insumo; nada de resultado de ensaio
+    ficha.materiais = ((estado.insumos || {}).materiais || [])
+      .map(m => ({ nome: m.nome, procedencia: m.procedencia, papel: m.papel }));
+  }
+
+  const tudo = lerFichas();
+  tudo[chave] = { ...ficha, guardadoEm: new Date().toISOString() };
+
+  if (!gravarFichas(tudo)) {
+    avisarFicha('erro', 'Não consegui guardar neste aparelho. '
+      + 'Se o navegador estiver em janela anônima, o que for guardado some ao fechar.');
+    return;
+  }
+  montarFicha();
+  avisarFicha('ok', `Guardado. Da próxima vez que abrir o app, ${F.conta} já vêm preenchidos. `
+    + `Continua sendo digitado a cada ensaio: ${F.naoGuarda}.`);
+}
+
+/** Esquece a ficha da família pedida. Não mexe no que está na tela. */
+function esquecerFicha(chave) {
+  const tudo = lerFichas();
+  delete tudo[chave];
+  gravarFichas(tudo);
+  montarFicha();
+  avisarFicha('ok', 'Esqueci esta ficha. O que está na tela continua como está — '
+    + 'só não volta mais sozinho na próxima abertura.');
+}
+
+/**
+ * Repõe o que estava guardado. Chamado uma vez, na abertura.
+ *
+ * Nunca é chamado ao editar um ensaio do histórico: ali o cabeçalho tem de ser
+ * o que foi lançado naquele dia, não o que está guardado hoje.
+ */
+function aplicarFichas() {
+  const tudo = lerFichas();
+  Object.entries(FICHAS).forEach(([chave, F]) => {
+    const f = tudo[chave];
+    if (!f) return;
+    Object.assign(estado[F.bloco], f.campos || {});
+    if (F.equip && f.equip) {
+      // só troca a lista que veio com conteúdo: ficha antiga sem frascos não
+      // deve apagar os frascos que o app traz de fábrica
+      ['cilindros', 'capsulas', 'frascos'].forEach(l => {
+        if (Array.isArray(f.equip[l]) && f.equip[l].length) {
+          estado.equip[l] = JSON.parse(JSON.stringify(f.equip[l]));
+        }
+      });
+    }
+    if (F.materiais && Array.isArray(f.materiais) && f.materiais.length) {
+      estado.insumos.materiais = f.materiais.map(m => ({ ...m }));
+    }
+  });
+}
+
+/* ------------------------------------------------------------
+   Tela
+   ------------------------------------------------------------ */
+
+function avisarFicha(tipo, msg) {
+  const el = $('fichaAviso');
+  if (!el) return;
+  const classe = tipo === 'erro' ? 'aviso erro' : 'aviso ok';
+  const ico = tipo === 'erro' ? '✕' : '✓';
+  el.innerHTML = `<div class="${classe}"><span class="ico">${ico}</span><span>${msg}</span></div>`;
+}
+
+function montarFicha() {
+  const alvo = $('cardFicha');
+  if (!alvo) return;
+  const chave = estado.abaDados || 'solos';
+  const F = FICHAS[chave];
+  if (!F) { alvo.innerHTML = ''; return; }
+
+  const guardada = lerFichas()[chave];
+  const quando = guardada && guardada.guardadoEm
+    ? instanteTexto(guardada.guardadoEm) : '';
+
+  alvo.innerHTML = `
+    <div class="card">
+      <h2>Guardar esta ficha
+        <span class="tag">${guardada ? 'Guardada em ' + quando : 'Ainda não guardada'}</span></h2>
+      <p class="hint" style="margin:0 0 14px">
+        Guarda ${F.conta} neste aparelho, e repõe tudo sozinho toda vez que o app abrir.
+        Continua sendo digitado a cada ensaio: ${F.naoGuarda} — se voltassem prontos, dois
+        ensaios diferentes acabariam com o mesmo nome e um sobrescreveria o outro.
+      </p>
+      <div style="display:flex; gap:9px; flex-wrap:wrap">
+        <button class="btn" type="button" data-salvar-ficha="${chave}">Salvar dados</button>
+        ${guardada ? `<button class="btn ghost sm" type="button"
+          data-esquecer-ficha="${chave}">Esquecer</button>` : ''}
+      </div>
+      <div id="fichaAviso" style="margin-top:12px"></div>
+    </div>`;
+}
+
+function ligarFicha() {
+  const alvo = $('cardFicha');
+  if (!alvo || alvo.dataset.ligado) return;
+  alvo.dataset.ligado = '1';
+  alvo.addEventListener('click', e => {
+    const b = e.target.closest('[data-salvar-ficha],[data-esquecer-ficha]');
+    if (!b) return;
+    if (b.dataset.salvarFicha) salvarFicha(b.dataset.salvarFicha);
+    else esquecerFicha(b.dataset.esquecerFicha);
+  });
+}
+
+/* ============================================================
    AGENDA DE ROMPIMENTOS
    Nem todo ensaio fecha no dia em que é lançado. O concreto rompe
    aos 7, 14 e 28 dias; o ISC e a leitura final da expansão saem
@@ -6930,11 +7122,14 @@ function montarSeletorDados() {
   $('seletorDados').querySelectorAll('[data-dados]').forEach(b =>
     b.addEventListener('click', () => trocarAbaDados(b.dataset.dados)));
   aplicarAbaDados();
+  montarFicha();
+  ligarFicha();
 }
 
 function trocarAbaDados(chave) {
   estado.abaDados = chave;
   montarSeletorDados();
+  montarFicha();
 }
 
 function aplicarAbaDados() {
@@ -11863,6 +12058,10 @@ document.addEventListener('input', e => {
   if (e.target.matches('input[type=text]')) atualizar();
 });
 
+
+/* a ficha guardada entra ANTES de desenhar: os campos já nascem preenchidos,
+   em vez de aparecer vazios e piscar no meio da abertura */
+aplicarFichas();
 
 montarCapsulas();
 montarPeneiras();
