@@ -89,6 +89,25 @@ laboratorista estiver no meio de um lançamento, nada se perde.
 
 ---
 
+## Marca do laboratório
+
+A identidade já vem dentro do arquivo: logo, cores, fontes e o nome da empresa.
+O laboratorista não configura nada — abre e trabalha. Isso vale para o topo da
+tela, o título da janela, o ícone na tela inicial e o alto de todas as folhas
+do relatório.
+
+Cada cliente recebe o seu arquivo. Para gerar o de outro laboratório, crie
+`marca/<cliente>/` com o `marca.json` e os arquivos de logo, e rode
+`bash build.sh <cliente>`. O código do app não muda — só a pasta da marca.
+
+**Nesta versão:** Jotta Engenharia. Grafite `#1B2127` e amarelo de sinalização
+`#FFC400`, tipografia Barlow Semi Condensed nos títulos e Inter nos dados, as
+duas embutidas para o app abrir sem sinal. O amarelo é sempre ação (botão, aba
+corrente), nunca situação de ensaio — quem diz se passou ou não é o verde, o
+âmbar e o vermelho, sempre com texto junto da cor.
+
+---
+
 ## Sincronização com o Drive
 
 Dentro do app, aba **Histórico → Sincronização com o Drive**, com o passo a
@@ -106,8 +125,9 @@ nos outros.
 Não. GitHub Pages é gratuito para repositório público, e a planilha é sua.
 
 **O repositório público expõe os ensaios?**
-Não. O que fica no GitHub é só o programa. Os ensaios ficam no celular e na
-sua planilha do Drive, que continua privada.
+Não. O que fica no GitHub é o programa e a identidade visual do laboratório —
+nada de obra, pessoa ou resultado. Os ensaios ficam no celular e na sua planilha
+do Drive, que continua privada.
 
 **E se eu quiser um APK depois?**
 Dá para acrescentar sem refazer nada: o mesmo repositório pode ganhar uma
