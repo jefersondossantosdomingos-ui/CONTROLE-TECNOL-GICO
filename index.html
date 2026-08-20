@@ -1311,18 +1311,7 @@ summary:hover{color:var(--text);}
     <button class="btn ghost sm" type="button" data-eqadd="frascos">+ Frasco</button>
   </div>
 
-  <div class="card">
-    <h2>Este cadastro se guarda sozinho
-      <span class="tag" id="equipGuardado">Guardado neste aparelho</span></h2>
-    <p class="hint" style="margin:0">
-      Não há botão de salvar aqui: cilindro, cápsula e frasco são o inventário da bancada,
-      não dado de ensaio — cada alteração já fica guardada no aparelho e volta na próxima
-      vez que o app abrir. O que está cadastrado aparece nas listas de escolha dos ensaios:
-      o cilindro na compactação e no ISC, a cápsula em toda umidade, o frasco na massa
-      específica in situ. Isso evita redigitar tara e volume a cada ensaio — e evita o erro
-      de digitar um número diferente do que está gravado no equipamento.
-    </p>
-  </div>
+  <div id="cardFichaEquip"></div>
 </section>
 
 <!-- ============ ABA · ANÁLISE ============ -->
@@ -3848,9 +3837,12 @@ function ligarCadastro() {
       } else {
         item[el.dataset.f] = el.value;
       }
-      montarEquipamentos();
+      /* NÃO redesenha a tabela aqui. Refazer o innerHTML destrói o campo que
+         está sob o dedo, e no celular o teclado fecha a cada tecla digitada.
+         Só a célula calculada precisa mudar — o resto já está certo na tela. */
+      redesenharCalculadas(el, item);
       resincronizarEquipamentos();
-      guardarEquipamentos();
+      marcarCadastroAlterado();
       atualizar();
     });
   });
@@ -3862,11 +3854,27 @@ function ligarCadastro() {
   });
 }
 
+/**
+ * Refaz só a célula que é calculada — hoje, o volume do cilindro.
+ *
+ * Somar e remover linha podem redesenhar tudo: ali não há campo em foco para
+ * perder. Digitar, não.
+ */
+function redesenharCalculadas(el, item) {
+  const t = TABELAS_EQUIP[el.dataset.eq];
+  if (!t || !t.extra) return;
+  const celula = el.closest('tr').querySelector('td.forte');
+  if (!celula) return;
+  const molde = document.createElement('tbody');
+  molde.innerHTML = `<tr>${t.extra(item)}</tr>`;
+  celula.innerHTML = molde.querySelector('td').innerHTML;
+}
+
 function adicionarEquipamento(chave) {
   estado.equip[chave].push(TABELAS_EQUIP[chave].novo());
   montarEquipamentos();
   resincronizarEquipamentos();
-  guardarEquipamentos();
+  marcarCadastroAlterado();
   atualizar();
 }
 
@@ -3876,7 +3884,7 @@ function removerEquipamento(chave, i) {
   lista.splice(i, 1);
   montarEquipamentos();
   resincronizarEquipamentos();
-  guardarEquipamentos();
+  marcarCadastroAlterado();
   atualizar();
 }
 
@@ -6623,22 +6631,62 @@ const FICHAS = {
 
 const FICHA_EQUIP = 'equipamentos';
 
-/** Chamado pelos três gestos que mexem no cadastro: digitar, somar e remover. */
+/* Alterado na tela e ainda não guardado. Serve para o cartão avisar, em vez
+   de deixar o operador sair da aba achando que ficou salvo. */
+let cadastroAlterado = false;
+
+function marcarCadastroAlterado() {
+  cadastroAlterado = true;
+  montarCartaoEquip();
+}
+
 function guardarEquipamentos() {
   const tudo = lerFichas();
   tudo[FICHA_EQUIP] = {
     equip: JSON.parse(JSON.stringify(estado.equip || {})),
     guardadoEm: new Date().toISOString(),
   };
-  gravarFichas(tudo);
-  const el = $('equipGuardado');
-  if (el) el.textContent = `Guardado neste aparelho às ${horaCurta(new Date())}`;
+  if (!gravarFichas(tudo)) {
+    avisarEquip('erro', 'Não consegui guardar neste aparelho. '
+      + 'Se o navegador estiver em janela anônima, o que for guardado some ao fechar.');
+    return;
+  }
+  cadastroAlterado = false;
+  montarCartaoEquip();
+  avisarEquip('ok', 'Cadastro guardado. Cilindros, cápsulas e frascos voltam prontos '
+    + 'na próxima vez que o app abrir, neste aparelho.');
 }
 
-/** "23:41" — o suficiente para o operador ver que o toque dele pegou. */
-function horaCurta(d) {
-  const p = x => String(x).padStart(2, '0');
-  return `${p(d.getHours())}:${p(d.getMinutes())}`;
+function avisarEquip(tipo, msg) {
+  const el = $('equipAviso');
+  if (!el) return;
+  el.innerHTML = `<div class="aviso ${tipo === 'erro' ? 'erro' : 'ok'}">`
+    + `<span class="ico">${tipo === 'erro' ? '✕' : '✓'}</span><span>${msg}</span></div>`;
+}
+
+function montarCartaoEquip() {
+  const alvo = $('cardFichaEquip');
+  if (!alvo) return;
+  const guardado = lerFichas()[FICHA_EQUIP];
+  const quando = guardado && guardado.guardadoEm ? instanteTexto(guardado.guardadoEm) : '';
+  const etiqueta = cadastroAlterado ? 'Alterado — ainda não guardado'
+    : guardado ? 'Guardado em ' + quando : 'Ainda não guardado';
+
+  alvo.innerHTML = `
+    <div class="card">
+      <h2>Guardar este cadastro
+        <span class="tag${cadastroAlterado ? ' pendente' : ''}">${etiqueta}</span></h2>
+      <p class="hint" style="margin:0 0 14px">
+        Cilindro, cápsula e frasco são o inventário da bancada — cadastre uma vez e escolha
+        nos ensaios. Guardado aqui, o cadastro volta pronto toda vez que o app abrir.
+        O que está cadastrado aparece nas listas dos ensaios: o cilindro na compactação e no
+        ISC, a cápsula em toda umidade, o frasco na massa específica in situ.
+      </p>
+      <button class="btn" type="button" id="btnGuardarEquip">Salvar cadastro</button>
+      <div id="equipAviso" style="margin-top:12px"></div>
+    </div>`;
+  const b = $('btnGuardarEquip');
+  if (b) b.addEventListener('click', guardarEquipamentos);
 }
 
 /* ------------------------------------------------------------
@@ -12745,6 +12793,7 @@ iniciarNuvem();
 iniciarTema();
 iniciarMarca();
 conferirModoComputador();
+montarCartaoEquip();
 ligarAnalise();
 ligarAtualizacao();
 registrarAtualizacao();
