@@ -586,6 +586,7 @@ th,td{text-align:right; padding:6px 8px; border-bottom:1px solid var(--border);}
 th{font-size:11px; font-weight:700; color:var(--text-mut);
   text-transform:uppercase; letter-spacing:.4px; white-space:nowrap;}
 td:first-child,th:first-child{text-align:left;}
+th.esq,td.esq{text-align:left;}
 td{white-space:nowrap;}
 tbody tr:last-child td{border-bottom:none;}
 td.num{color:var(--text-2);}
@@ -736,9 +737,16 @@ svg text{font-family:inherit;}
   display:flex; gap:3px; width:100%; padding:3px;
   background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.22);
   border-radius:12px;
+  /* com cinco abas não cabe tudo no celular: rola de lado em vez de sumir
+     com a quinta — sem isto, Equipamentos ficava inalcançável */
+  overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;
 }
+.nav-topo::-webkit-scrollbar{display:none;}
+.nav-topo button{scroll-snap-align:center;}
 .nav-topo button{
-  flex-direction:row; gap:7px; padding:9px 6px; border-radius:9px;
+  flex:1 0 auto; white-space:nowrap;
+  flex-direction:row; gap:7px; padding:9px 11px; border-radius:9px;
   color:rgba(255,255,255,.82); font-size:13.5px; font-weight:700; letter-spacing:.2px;
 }
 .nav-topo button svg{width:16px; height:16px; stroke:currentColor; fill:none;
@@ -944,6 +952,91 @@ section.aba.ativa{display:block; animation:entra .18s ease-out;}
 }
 .lista-ensaios li .norma{margin-left:auto; font-size:10.5px; color:var(--text-mut); white-space:nowrap;}
 
+/* ================= ANÁLISE ================= */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px;}
+.kpi{border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px;
+  background:var(--card); border-top:3px solid var(--text-mut);}
+.kpi .v{font-size:26px; font-weight:800; letter-spacing:-.02em;
+  font-family:var(--jt-fonte-titulo); line-height:1.1;}
+.kpi .k{font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+  color:var(--text-mut); margin-top:3px;}
+.kpi.ok{border-top-color:var(--ok);}
+.kpi.nao{border-top-color:var(--danger);}
+.kpi.pend{border-top-color:var(--warn);}
+
+/* semáforo: a barra dá a proporção, os selos dão o número — nunca só a cor */
+.semaforo{display:flex; flex-direction:column; gap:14px;}
+.sf-nome{font-size:13.5px; font-weight:800; display:flex; justify-content:space-between;
+  align-items:baseline; gap:9px;}
+.sf-nome span{font-size:11.5px; font-weight:600; color:var(--text-mut);}
+.sf-barra{display:flex; height:9px; border-radius:6px; overflow:hidden;
+  background:var(--bg); margin:6px 0 7px;}
+.sf-barra i{display:block;}
+.sf-barra i.ok{background:var(--ok);}
+.sf-barra i.nao{background:var(--danger);}
+.sf-barra i.romper{background:var(--warn);}
+.sf-barra i.sem{background:var(--border-strong);}
+.sf-conta{display:flex; gap:6px; flex-wrap:wrap;}
+
+/* ---- calendário ---- */
+.calnav{display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:12px;}
+.calnav button{
+  width:var(--jt-altura-campo); height:var(--jt-altura-campo); flex:0 0 auto;
+  border-radius:50%; border:1.5px solid var(--border-strong); background:var(--card);
+  color:var(--text); font-size:20px; line-height:1; cursor:pointer; font-family:inherit;
+}
+.calnav button:hover{background:var(--jt-superficie-2);}
+.calnav .mes{font-family:var(--jt-fonte-titulo); font-size:17px; font-weight:700;
+  letter-spacing:.2px; min-width:190px; text-align:center;}
+.calgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
+.caldow{font-size:10.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
+  color:var(--text-mut); text-align:center; padding-bottom:4px;}
+.calday{
+  /* altura fixa: com aspect-ratio, a célula virava um quadrado enorme no desktop */
+  height:56px; min-height:var(--jt-altura-campo);
+  border:1px solid var(--border); border-radius:9px;
+  background:var(--card); color:var(--text); font-family:inherit; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+  padding:0; transition:border-color .12s, transform .12s;
+}
+.calday .d{font-size:13px; font-weight:700; font-variant-numeric:tabular-nums;}
+.calday .n{font-size:10px; font-weight:800; color:var(--accent);}
+.calday.escuro .d, .calday.escuro .n{color:var(--jt-branco);}
+.calday.fora{opacity:.35;}
+.calday.hoje{border-color:var(--accent); border-width:2px;}
+.calday.sel{outline:3px solid var(--jt-acento); outline-offset:-1px; transform:scale(1.04);}
+.calday:hover{border-color:var(--border-strong);}
+.calleg{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:12px;
+  font-size:11.5px; color:var(--text-mut);}
+.calleg i{width:17px; height:11px; border-radius:3px; border:1px solid var(--border);}
+.calleg .pico{margin-left:auto; font-weight:700;}
+
+/* ---- lista do dia ---- */
+.linha-dia{display:flex; gap:11px; align-items:center; flex-wrap:wrap;
+  border-left:3px solid var(--accent); background:var(--bg); padding:10px 13px;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0; margin-bottom:8px;}
+.ld-quem{flex:1 1 190px; min-width:0;}
+.ld-quem b{display:block; font-size:14px; font-weight:800;}
+.ld-quem span{display:block; font-size:11.5px; color:var(--text-mut); margin-top:2px;}
+.ld-acoes{display:flex; gap:7px; flex-wrap:wrap;}
+
+/* ---- barras de andamento ---- */
+.barbloco{border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:13px 14px; background:var(--card); min-width:0;}
+.barbloco h3{font-family:var(--jt-fonte-titulo); font-size:14px; font-weight:700; margin:0 0 11px;
+  display:flex; justify-content:space-between; align-items:baseline; gap:9px;}
+.barbloco h3 span{font-size:11.5px; font-weight:600; color:var(--text-mut);
+  font-family:var(--jt-fonte-corpo);}
+.barrow{margin-bottom:9px;}
+.barlab{display:flex; justify-content:space-between; gap:9px; font-size:12px;
+  margin-bottom:3px; min-width:0;}
+.barlab span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.barlab b{font-variant-numeric:tabular-nums; flex:0 0 auto;}
+.bartrack{height:7px; background:var(--bg); border-radius:5px; overflow:hidden;}
+.bartrack i{display:block; height:100%; background:var(--jt-acento); border-radius:5px;}
+.un-col{font-style:normal; font-size:10.5px; color:var(--text-mut);}
+@media (max-width:640px){ .grid3 #anBarras, #anBarras{grid-template-columns:1fr;} }
+
 [data-modos]{--oculto:0;}
 .escondido{display:none !important;}
 
@@ -970,17 +1063,13 @@ summary:hover{color:var(--text);}
     <img class="logo" id="logoImg" alt="" style="display:none">
     <div class="tit">
       <h1 id="tituloApp">Controle Tecnológico</h1>
-      <div class="sub">Caracterização de solos</div>
+      <div class="sub">SGQ J.DOMINGOS</div>
     </div>
     <button class="btn-tema" id="btnTema" type="button" title="Trocar o tema"
             aria-label="Trocar o tema"><svg viewBox="0 0 24 24" id="icoTema"></svg></button>
   </div>
   <div class="chips">
     <span class="chip ok"><span class="dot"></span>Calculando</span>
-    <span class="chip" id="chipFamilia">Solos</span>
-    <span class="chip" id="chipModo">Completo</span>
-    <span class="chip" id="chipReg">—</span>
-    <span class="chip" id="chipFuro">—</span>
   </div>
   <nav class="nav-topo">
 <button type="button" class="ativo" data-aba="dados" data-modos="simples caracterizacao completo marshall concreto insumos">
@@ -994,6 +1083,14 @@ summary:hover{color:var(--text);}
 <button type="button" data-aba="historico" data-modos="simples caracterizacao completo marshall concreto insumos">
     <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M8 13h8"/></svg>
     Histórico
+  </button>
+<button type="button" data-aba="analise" data-modos="simples caracterizacao completo marshall concreto insumos">
+    <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+    Análise
+  </button>
+<button type="button" data-aba="equipamentos" data-modos="simples caracterizacao completo marshall concreto insumos">
+    <svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4z"/></svg>
+    Equipam.
   </button>
   </nav>
 </header>
@@ -1051,42 +1148,6 @@ summary:hover{color:var(--text);}
     </p>
   </div>
 
-  <div class="card" data-bloco="solos">
-    <h2>Cadastro de equipamentos <span class="tag">Cilindros, cápsulas e frascos</span></h2>
-    <p class="hint" style="margin:0 0 14px">
-      Cadastre uma vez e escolha nos ensaios. O <b>volume do cilindro</b> é calculado do
-      diâmetro e da altura; a <b>tara da cápsula</b> passa a ser puxada daqui em vez de
-      digitada em cada ensaio.
-    </p>
-
-    <h3 class="sub-cad">Cilindros de compactação</h3>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Peso (g)</th><th>Diâmetro (mm)</th><th>Altura (mm)</th>
-          <th>Volume (cm³)</th><th></th></tr></thead>
-        <tbody id="tbCilindros"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="cilindros">+ Cilindro</button>
-
-    <h3 class="sub-cad">Cápsulas</h3>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Tara (g)</th><th></th></tr></thead>
-        <tbody id="tbCapsCad"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="capsulas">+ Cápsula</button>
-
-    <h3 class="sub-cad">Frascos de areia</h3>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Dens. da areia (kg/m³)</th><th>Areia no cone (g)</th><th></th></tr></thead>
-        <tbody id="tbFrascos"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="frascos">+ Frasco</button>
-  </div>
 
   <div class="card" data-bloco="cauq">
     <h2>Obra e contratos <span class="tag">Cabeçalho da folha de CAUQ</span></h2>
@@ -1208,6 +1269,106 @@ summary:hover{color:var(--text);}
     <h2>Como o cabeçalho vai sair <span class="tag">Prévia</span></h2>
     <div class="previa-wrap" id="mdPreview"></div>
     <p class="hint">Prévia em escala reduzida do bloco que encabeça cada folha do relatório.</p>
+  </div>
+</section>
+
+<!-- ============ ABA · EQUIPAMENTOS ============ -->
+<section class="aba" id="aba-equipamentos" data-modos="simples caracterizacao completo marshall concreto insumos">
+  <div class="card">
+    <h2>Cadastro de equipamentos <span class="tag">Cilindros, cápsulas e frascos</span></h2>
+    <p class="hint" style="margin:0 0 14px">
+      Cadastre uma vez e escolha nos ensaios. O <b>volume do cilindro</b> é calculado do
+      diâmetro e da altura; a <b>tara da cápsula</b> passa a ser puxada daqui em vez de
+      digitada em cada ensaio.
+    </p>
+
+    <h3 class="sub-cad">Cilindros de compactação</h3>
+    <div class="tabwrap">
+      <table class="t-form">
+        <thead><tr><th>Nº</th><th>Peso (g)</th><th>Diâmetro (mm)</th><th>Altura (mm)</th>
+          <th>Volume (cm³)</th><th></th></tr></thead>
+        <tbody id="tbCilindros"></tbody>
+      </table>
+    </div>
+    <button class="btn ghost sm" type="button" data-eqadd="cilindros">+ Cilindro</button>
+
+    <h3 class="sub-cad">Cápsulas</h3>
+    <div class="tabwrap">
+      <table class="t-form">
+        <thead><tr><th>Nº</th><th>Tara (g)</th><th></th></tr></thead>
+        <tbody id="tbCapsCad"></tbody>
+      </table>
+    </div>
+    <button class="btn ghost sm" type="button" data-eqadd="capsulas">+ Cápsula</button>
+
+    <h3 class="sub-cad">Frascos de areia</h3>
+    <div class="tabwrap">
+      <table class="t-form">
+        <thead><tr><th>Nº</th><th>Dens. da areia (kg/m³)</th><th>Areia no cone (g)</th><th></th></tr></thead>
+        <tbody id="tbFrascos"></tbody>
+      </table>
+    </div>
+    <button class="btn ghost sm" type="button" data-eqadd="frascos">+ Frasco</button>
+  </div>
+
+  <div class="card">
+    <h2>Onde isso é usado <span class="tag">Vale para todas as famílias</span></h2>
+    <p class="hint" style="margin:0">
+      O que está cadastrado aqui aparece nas listas de escolha dos ensaios: o cilindro na
+      compactação e no ISC, a cápsula em toda umidade, o frasco na massa específica in situ.
+      Cadastrar uma vez evita redigitar tara e volume em cada ensaio — e evita o erro de
+      digitar um número diferente do que está gravado no equipamento.
+    </p>
+  </div>
+</section>
+
+<!-- ============ ABA · ANÁLISE ============ -->
+<section class="aba" id="aba-analise" data-modos="simples caracterizacao completo marshall concreto insumos">
+
+  <div class="card">
+    <h2>Recorte da análise <span class="tag">Vale para tudo nesta aba</span></h2>
+    <div class="grid4" id="filtrosAnalise"></div>
+    <p class="hint" id="anResumoFiltro"></p>
+  </div>
+
+  <div class="card">
+    <h2>Números do recorte</h2>
+    <div class="kpis" id="anKpis"></div>
+    <div id="anSemaforo" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <h2>Resultados por ensaio e camada <span class="tag">Mínimo, média e máximo</span></h2>
+    <p class="hint" style="margin:0 0 12px">
+      Média sozinha esconde ponto fora da curva — por isso vêm o menor, o maior e o
+      desvio-padrão ao lado. <b>n</b> é quantos ensaios entraram em cada linha.
+    </p>
+    <div class="tabwrap"><table id="tbMedias">
+      <thead><tr><th class="esq">Ensaio</th><th class="esq">Camada</th>
+        <th class="esq">Indicador</th><th>n</th>
+        <th>Mín.</th><th>Média</th><th>Máx.</th><th>Desvio</th></tr></thead>
+      <tbody></tbody></table></div>
+  </div>
+
+  <div class="card">
+    <h2>Calendário de lançamentos <span class="tag">Toque num dia</span></h2>
+    <div class="calnav">
+      <button type="button" id="anMesAntes" aria-label="Mês anterior">‹</button>
+      <span class="mes" id="anMesLabel"></span>
+      <button type="button" id="anMesDepois" aria-label="Próximo mês">›</button>
+    </div>
+    <div class="calgrid" id="anCalendario"></div>
+    <div class="calleg" id="anLegenda"></div>
+  </div>
+
+  <div class="card">
+    <h2 id="anDiaTitulo">Lançamentos do dia</h2>
+    <div id="anListaDia"></div>
+  </div>
+
+  <div class="card">
+    <h2>Andamento <span class="tag">Dia, semana e mês</span></h2>
+    <div class="grid3" id="anBarras"></div>
   </div>
 </section>
 
@@ -6590,6 +6751,458 @@ function ligarFicha() {
 }
 
 /* ============================================================
+   ANÁLISE
+   O histórico responde "o que eu lancei?". Esta aba responde as
+   perguntas do engenheiro: quanto se produziu, o que está fora
+   do critério, e como os números se distribuem por camada.
+
+   Tudo aqui lê o histórico já salvo — nada é recalculado. Um
+   ensaio guardado em junho continua com os números de junho.
+   ============================================================ */
+
+const MESES_CAL = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+                   'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const DIAS_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+
+/* seis passos do claro ao escuro: o dia mais cheio do mês fica no tom final */
+const CALOR = ['#EEF2F5', '#FFEDB3', '#FFD34D', '#FFC400', '#D19700', '#946600'];
+
+/** Indicadores que fazem média em cada família. */
+const INDICADORES = {
+  solos: [
+    ['dmax', 'ρ máx.', 'kg/m³', 0],
+    ['hot',  'h ótima', '%', 1],
+    ['cbr',  'ISC', '%', 1],
+    ['gc',   'GC médio', '%', 1],
+  ],
+  cauq: [
+    ['teor', 'Teor de CAP', '%', 2],
+    ['vv',   'Vazios', '%', 2],
+    ['rbv',  'RBV', '%', 1],
+    ['est',  'Estabilidade', 'kgf', 0],
+    ['rtcd', 'RTCD', 'MPa', 3],
+  ],
+  concreto: [
+    ['fck',  'Fck de projeto', 'MPa', 0],
+    ['fc28', 'Resistência aos 28 dias', 'MPa', 2],
+    ['pct',  'Percentual do fck', '%', 1],
+  ],
+  insumos: [
+    ['abrasao', 'Abrasão', '%', 2],
+    ['forma',   'Índice de forma', '', 3],
+    ['ea',      'Equivalente de areia', '%', 1],
+    ['finura',  'Finura do cimento', '%', 2],
+  ],
+};
+
+const NOME_FAMILIA = { solos:'Solos', cauq:'CAUQ', concreto:'Concreto',
+                       insumos:'Insumos do concreto' };
+
+let anMesRef = null;      // primeiro dia do mês exibido
+let anDiaSel = null;      // dia escolhido no calendário
+const anFiltro = { obra:'', rodovia:'', camada:'', familia:'', periodo:'tudo' };
+
+/* ------------------------------------------------------------
+   Datas
+   ------------------------------------------------------------ */
+
+const isoDeData = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  + `-${String(d.getDate()).padStart(2, '0')}`;
+
+/** A data que conta é a do ensaio; sem ela, a de quando foi salvo. */
+function dataDoEnsaio(e) {
+  return (e.resumo && e.resumo.data) || String(e.salvoEm || '').slice(0, 10) || '';
+}
+
+function domingoDaSemana(iso) {
+  const [a, m, d] = iso.split('-').map(Number);
+  const dt = new Date(a, m - 1, d);
+  dt.setDate(dt.getDate() - dt.getDay());
+  return dt;
+}
+
+/* ------------------------------------------------------------
+   Recorte
+   ------------------------------------------------------------ */
+
+/** Valores que aparecem em cada filtro, tirados do que existe no histórico. */
+function opcoesDoHistorico(campo) {
+  return [...new Set(historico
+    .map(e => String((e.resumo || {})[campo] || '').trim())
+    .filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+function passaNoRecorte(e) {
+  const r = e.resumo || {};
+  if (anFiltro.obra && r.obra !== anFiltro.obra) return false;
+  if (anFiltro.rodovia && r.rodovia !== anFiltro.rodovia) return false;
+  if (anFiltro.camada && r.camada !== anFiltro.camada) return false;
+  if (anFiltro.familia && (r.familia || 'solos') !== anFiltro.familia) return false;
+  return true;
+}
+
+/** O que entra nos números: o recorte dos filtros mais o período. */
+function escopoAnalise() {
+  const noMes = `${anMesRef.getFullYear()}-${String(anMesRef.getMonth() + 1).padStart(2, '0')}`;
+  const limite = new Date();
+  limite.setDate(limite.getDate() - 30);
+  const iso30 = isoDeData(limite);
+
+  return historico.filter(e => {
+    if (!passaNoRecorte(e)) return false;
+    const d = dataDoEnsaio(e);
+    if (anFiltro.periodo === 'mes' && d.slice(0, 7) !== noMes) return false;
+    if (anFiltro.periodo === '30' && d < iso30) return false;
+    return true;
+  });
+}
+
+/** Ensaios do recorte, sem o filtro de período — é o que o calendário desenha. */
+function paraOCalendario() { return historico.filter(passaNoRecorte); }
+
+/* ------------------------------------------------------------
+   Conformidade
+   ------------------------------------------------------------ */
+
+/**
+ * Situação de um ensaio: 'romper', 'atende', 'nao' ou 'sem'.
+ *
+ * Em solos não existe um campo "atende": o que diz se a camada passou é a
+ * relação entre furos aceitos e furos verificados. Nas outras famílias o
+ * próprio núcleo de cálculo já devolve o veredito.
+ */
+function situacaoDoEnsaio(r) {
+  if ((r.pendencias || []).length) return 'romper';
+  if ((r.familia || 'solos') === 'solos') {
+    if (!r.furos) return 'sem';
+    return r.aceitos === r.furos ? 'atende' : 'nao';
+  }
+  if (r.atende === true) return 'atende';
+  if (r.atende === false) return 'nao';
+  return 'sem';
+}
+
+/* ------------------------------------------------------------
+   Estatística
+   ------------------------------------------------------------ */
+
+function estatistica(valores) {
+  const v = valores.filter(x => typeof x === 'number' && isFinite(x));
+  if (!v.length) return null;
+  const media = v.reduce((a, b) => a + b, 0) / v.length;
+  // desvio da população: são todos os ensaios do recorte, não uma amostra deles
+  const dp = Math.sqrt(v.reduce((a, b) => a + (b - media) ** 2, 0) / v.length);
+  return { n: v.length, min: Math.min(...v), max: Math.max(...v), media, dp };
+}
+
+/* ------------------------------------------------------------
+   Tela
+   ------------------------------------------------------------ */
+
+function montarAnalise() {
+  if (!$('anCalendario')) return;
+  if (!anMesRef) anMesRef = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  if (!anDiaSel) anDiaSel = hojeIso();
+
+  montarFiltrosAnalise();
+  const escopo = escopoAnalise();
+  montarKpis(escopo);
+  montarSemaforo(escopo);
+  montarMedias(escopo);
+  montarCalendario();
+}
+
+function montarFiltrosAnalise() {
+  const campos = [
+    ['obra',    'Obra',    'Todas as obras'],
+    ['rodovia', 'Rodovia', 'Todas as rodovias'],
+    ['camada',  'Camada',  'Todas as camadas'],
+  ];
+  const seletor = (chave, rot, todos, opcoes) => `
+    <div><label>${rot}</label>
+      <select data-an="${chave}">
+        <option value="">${todos}</option>
+        ${opcoes.map(o => `<option${o === anFiltro[chave] ? ' selected' : ''}>${o}</option>`).join('')}
+      </select></div>`;
+
+  const familias = [...new Set(historico.map(e => (e.resumo || {}).familia || 'solos'))];
+
+  $('filtrosAnalise').innerHTML =
+    campos.map(([c, r, t]) => seletor(c, r, t, opcoesDoHistorico(c))).join('')
+    + `<div><label>Família</label><select data-an="familia">
+        <option value="">Todas as famílias</option>
+        ${familias.map(f => `<option value="${f}"${f === anFiltro.familia ? ' selected' : ''}>`
+          + `${NOME_FAMILIA[f] || f}</option>`).join('')}
+      </select></div>`
+    + `<div style="grid-column:span 2"><label>Período</label><select data-an="periodo">
+        ${[['tudo','Tudo que está guardado'], ['mes','Só o mês do calendário'],
+           ['30','Últimos 30 dias']].map(([v, r]) =>
+          `<option value="${v}"${v === anFiltro.periodo ? ' selected' : ''}>${r}</option>`).join('')}
+      </select></div>`;
+
+  const escopo = escopoAnalise();
+  $('anResumoFiltro').textContent = historico.length
+    ? `${escopo.length} de ${historico.length} ensaio(s) guardado(s) entram neste recorte.`
+    : 'Nenhum ensaio guardado ainda. Assim que você salvar o primeiro, ele aparece aqui.';
+}
+
+function montarKpis(escopo) {
+  const conta = { atende:0, nao:0, romper:0, sem:0 };
+  escopo.forEach(e => { conta[situacaoDoEnsaio(e.resumo || {})]++; });
+
+  $('anKpis').innerHTML = [
+    [escopo.length, 'No recorte', ''],
+    [conta.atende, 'Atendem', 'ok'],
+    [conta.nao, 'Não atendem', 'nao'],
+    [conta.romper, 'À romper', 'pend'],
+  ].map(([v, k, c]) => `<div class="kpi ${c}"><div class="v">${v}</div>`
+    + `<div class="k">${k}</div></div>`).join('');
+}
+
+function montarSemaforo(escopo) {
+  const por = {};
+  escopo.forEach(e => {
+    const r = e.resumo || {};
+    const nome = NOME_FAMILIA[r.familia || 'solos'] || r.familia;
+    const p = por[nome] = por[nome] || { atende:0, nao:0, romper:0, sem:0, total:0 };
+    p[situacaoDoEnsaio(r)]++; p.total++;
+  });
+
+  const linhas = Object.entries(por).sort((a, b) => b[1].nao - a[1].nao);
+  if (!linhas.length) {
+    $('anSemaforo').innerHTML = '<p class="hint vazia-lista">Sem ensaios neste recorte.</p>';
+    return;
+  }
+  $('anSemaforo').innerHTML = '<div class="semaforo">' + linhas.map(([nome, c]) => {
+    // a barra é a proporção; os números vêm escritos ao lado, nunca só a cor
+    const larg = t => c.total ? Math.round(t / c.total * 100) : 0;
+    return `<div class="sf-linha">
+      <div class="sf-nome">${nome}<span>${c.total} ensaio(s)</span></div>
+      <div class="sf-barra">
+        <i class="ok" style="width:${larg(c.atende)}%"></i>
+        <i class="nao" style="width:${larg(c.nao)}%"></i>
+        <i class="romper" style="width:${larg(c.romper)}%"></i>
+        <i class="sem" style="width:${larg(c.sem)}%"></i>
+      </div>
+      <div class="sf-conta">
+        ${c.atende ? `<span class="badge ok">${c.atende} atende</span>` : ''}
+        ${c.nao ? `<span class="badge fail">${c.nao} não atende</span>` : ''}
+        ${c.romper ? `<span class="badge romper">${c.romper} à romper</span>` : ''}
+        ${c.sem ? `<span class="badge">${c.sem} sem critério</span>` : ''}
+      </div></div>`;
+  }).join('') + '</div>';
+}
+
+function montarMedias(escopo) {
+  /* família e camada ficam em campos próprios do grupo: juntar as duas numa
+     string só quebraria em qualquer camada cujo nome contenha o separador */
+  const grupos = new Map();
+  escopo.forEach(e => {
+    const r = e.resumo || {};
+    const fam = r.familia || 'solos';
+    const camada = r.camada || '—';
+    const chave = JSON.stringify([fam, camada]);
+    if (!grupos.has(chave)) grupos.set(chave, { fam, camada, rs: [] });
+    grupos.get(chave).rs.push(r);
+  });
+
+  const linhas = [];
+  grupos.forEach(({ fam, camada, rs }) => {
+    (INDICADORES[fam] || []).forEach(([campo, rot, un, casas]) => {
+      const e = estatistica(rs.map(r => r[campo]));
+      if (e) linhas.push({ fam: NOME_FAMILIA[fam] || fam, camada, rot, un, casas, e });
+    });
+  });
+
+  const tb = $('tbMedias').querySelector('tbody');
+  if (!linhas.length) {
+    tb.innerHTML = '<tr><td colspan="8" class="esq">'
+      + '<span class="vazio">Nenhum número para comparar neste recorte.</span></td></tr>';
+    return;
+  }
+  linhas.sort((a, b) => a.fam.localeCompare(b.fam, 'pt-BR')
+    || a.camada.localeCompare(b.camada, 'pt-BR') || a.rot.localeCompare(b.rot, 'pt-BR'));
+
+  tb.innerHTML = linhas.map(L => `<tr>
+    <td class="esq">${L.fam}</td>
+    <td class="esq">${L.camada}</td>
+    <td class="esq">${L.rot}${L.un ? ` <i class="un-col">${L.un}</i>` : ''}</td>
+    <td class="num">${L.e.n}</td>
+    <td class="num">${fmt(L.e.min, L.casas)}</td>
+    <td class="forte">${fmt(L.e.media, L.casas)}</td>
+    <td class="num">${fmt(L.e.max, L.casas)}</td>
+    <td class="num">${fmt(L.e.dp, L.casas)}</td></tr>`).join('');
+}
+
+/* ------------------------------------------------------------
+   Calendário
+   ------------------------------------------------------------ */
+
+function montarCalendario() {
+  const lista = paraOCalendario();
+  const porDia = {};
+  lista.forEach(e => {
+    const d = dataDoEnsaio(e);
+    if (d) porDia[d] = (porDia[d] || 0) + 1;
+  });
+
+  const ano = anMesRef.getFullYear(), mes = anMesRef.getMonth();
+  $('anMesLabel').textContent =
+    `${MESES_CAL[mes].charAt(0).toUpperCase()}${MESES_CAL[mes].slice(1)} de ${ano}`;
+
+  // a grade começa no domingo da semana em que cai o dia 1º
+  const primeiro = new Date(ano, mes, 1);
+  const inicio = new Date(ano, mes, 1 - primeiro.getDay());
+
+  let pico = 0;
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate() + i);
+    if (d.getMonth() === mes) pico = Math.max(pico, porDia[isoDeData(d)] || 0);
+  }
+
+  const hoje = hojeIso();
+  const grade = $('anCalendario');
+  grade.innerHTML = DIAS_SEMANA.map(d => `<div class="caldow">${d}</div>`).join('');
+
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate() + i);
+    const iso = isoDeData(d), qtd = porDia[iso] || 0, fora = d.getMonth() !== mes;
+    if (i >= 35 && fora) continue;          // sexta linha só existe se o mês precisar
+
+    /* com pico de 1 ou 2 não existe faixa para graduar: todo dia marcado
+       ficaria no tom mais escuro, o que faria um ensaio parecer um mutirão */
+    let nivel = 0;
+    if (qtd > 0) nivel = pico <= 2 ? 2 : Math.min(CALOR.length - 1,
+      1 + Math.round((qtd / pico) * (CALOR.length - 2)));
+
+    const classes = ['calday'];
+    if (fora) classes.push('fora');
+    if (iso === hoje) classes.push('hoje');
+    if (iso === anDiaSel) classes.push('sel');
+    if (nivel >= 4) classes.push('escuro');   // fundo forte pede número claro
+
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = classes.join(' ');
+    if (nivel) b.style.background = CALOR[nivel];
+    b.dataset.dia = iso;
+    b.title = qtd ? `${dataBr(iso)} — ${qtd} ensaio(s)` : dataBr(iso);
+    b.innerHTML = `<span class="d">${d.getDate()}</span>`
+      + (qtd ? `<span class="n">${qtd}</span>` : '');
+    grade.appendChild(b);
+  }
+
+  $('anLegenda').innerHTML = '<span>Menos</span>'
+    + CALOR.map(c => `<i style="background:${c}"></i>`).join('')
+    + '<span>Mais</span>'
+    + (pico ? `<span class="pico">Dia mais cheio do mês: ${pico} ensaio(s)</span>` : '');
+
+  montarDia(lista);
+  montarBarras(lista);
+}
+
+function montarDia(lista) {
+  const doDia = lista.filter(e => dataDoEnsaio(e) === anDiaSel);
+  $('anDiaTitulo').textContent = `Lançamentos de ${dataBr(anDiaSel)}`;
+
+  if (!doDia.length) {
+    $('anListaDia').innerHTML = '<p class="hint vazia-lista">'
+      + 'Nenhum ensaio lançado nesta data.</p>';
+    return;
+  }
+  $('anListaDia').innerHTML = doDia
+    .sort((a, b) => String(a.salvoEm || '').localeCompare(String(b.salvoEm || '')))
+    .map(e => {
+      const r = e.resumo || {};
+      const sit = situacaoDoEnsaio(r);
+      const selo = sit === 'atende' ? '<span class="badge ok">atende</span>'
+        : sit === 'nao' ? '<span class="badge fail">não atende</span>'
+        : sit === 'romper' ? '<span class="badge romper">à romper</span>' : '';
+      return `<div class="linha-dia">
+        <div class="ld-quem">
+          <b>${r.registro || '—'} · ${r.estaca || '—'}</b>
+          <span>${NOME_FAMILIA[r.familia || 'solos']} · ${r.camada || '—'}</span>
+        </div>
+        <div class="ld-selos">${selo}</div>
+        <div class="ld-acoes">
+          <button class="btn ghost sm" type="button" data-editar="${e.id}">Abrir</button>
+          <button class="btn ghost sm" type="button" data-pdf="${e.id}">PDF</button>
+        </div></div>`;
+    }).join('');
+}
+
+function montarBarras(lista) {
+  const ini = domingoDaSemana(anDiaSel);
+  const fim = new Date(ini.getFullYear(), ini.getMonth(), ini.getDate() + 6);
+  const isoIni = isoDeData(ini), isoFim = isoDeData(fim);
+
+  const doDia = lista.filter(e => dataDoEnsaio(e) === anDiaSel);
+  const daSemana = lista.filter(e => {
+    const d = dataDoEnsaio(e); return d >= isoIni && d <= isoFim;
+  });
+  const doMes = lista.filter(e => dataDoEnsaio(e).slice(0, 7) === anDiaSel.slice(0, 7));
+
+  $('anBarras').innerHTML = [['Dia', doDia], ['Semana', daSemana], ['Mês', doMes]]
+    .map(([titulo, l]) => blocoDeBarras(titulo, l)).join('');
+}
+
+function blocoDeBarras(titulo, lista) {
+  const conta = {};
+  lista.forEach(e => {
+    const r = e.resumo || {};
+    const nome = (MODOS[r.modo] && MODOS[r.modo].nome) || NOME_FAMILIA[r.familia] || r.modo;
+    conta[nome] = (conta[nome] || 0) + 1;
+  });
+  const itens = Object.entries(conta).sort((a, b) => b[1] - a[1]);
+  const cabeca = `<div class="barbloco"><h3>${titulo}<span>${lista.length} ensaio(s)</span></h3>`;
+  if (!itens.length) return cabeca + '<p class="hint vazia-lista">Sem lançamentos.</p></div>';
+
+  const maior = itens[0][1];
+  return cabeca + itens.map(([nome, q]) => `<div class="barrow">
+    <div class="barlab"><span>${nome}</span><b>${q}</b></div>
+    <div class="bartrack"><i style="width:${Math.max(5, Math.round(q / maior * 100))}%"></i></div>
+    </div>`).join('') + '</div>';
+}
+
+/* ------------------------------------------------------------
+   Ligações
+   ------------------------------------------------------------ */
+
+function ligarAnalise() {
+  const aba = $('aba-analise');
+  if (!aba || aba.dataset.ligado) return;
+  aba.dataset.ligado = '1';
+
+  aba.addEventListener('change', e => {
+    const s = e.target.closest('[data-an]');
+    if (!s) return;
+    anFiltro[s.dataset.an] = s.value;
+    montarAnalise();
+  });
+
+  aba.addEventListener('click', e => {
+    const dia = e.target.closest('[data-dia]');
+    if (dia) { anDiaSel = dia.dataset.dia; montarCalendario(); return; }
+
+    const b = e.target.closest('[data-editar],[data-pdf]');
+    if (!b) return;
+    if (b.dataset.editar) editarEnsaio(b.dataset.editar);
+    else exportarEnsaio(b.dataset.pdf);
+  });
+
+  $('anMesAntes').addEventListener('click', () => mudarMesAnalise(-1));
+  $('anMesDepois').addEventListener('click', () => mudarMesAnalise(1));
+}
+
+function mudarMesAnalise(passo) {
+  anMesRef = new Date(anMesRef.getFullYear(), anMesRef.getMonth() + passo, 1);
+  // com o período preso ao mês do calendário, virar o mês muda todos os números
+  if (anFiltro.periodo === 'mes') montarAnalise();
+  else montarCalendario();
+  $('anMesLabel').scrollIntoView({ block: 'nearest' });
+}
+
+/* ============================================================
    AGENDA DE ROMPIMENTOS
    Nem todo ensaio fecha no dia em que é lançado. O concreto rompe
    aos 7, 14 e 28 dias; o ISC e a leitura final da expansão saem
@@ -7025,9 +7638,6 @@ function atualizarCabecalhoNaTela() {
       ${assinaturasFolha()}
     </div>`;
 
-  $('chipReg').textContent = (f === 'concreto'
-    ? (estado.concreto.peca.rg || m.registro) : m.registro) || '—';
-  $('chipFuro').textContent = onde;
   $('rodapeEnsaio').textContent =
     `${m.registro || '—'} / ${onde} / ${material} · ${dataTexto()}`;
 }
@@ -7580,14 +8190,7 @@ function aplicarFamilia() {
     el.classList.toggle('escondido-fam', !vale);
   });
   const f = FAMILIAS[estado.familia];
-  $('chipFamilia').textContent = f ? f.nome : '—';
-  const assunto = {
-    cauq:     'Concreto asfáltico',
-    concreto: 'Concreto estrutural',
-    insumos:  'Insumos do concreto',
-  }[estado.familia] || 'Caracterização de solos';
-  // a logo do topo já traz o nome da empresa; repetir aqui só ocupa linha
-  document.querySelector('header .sub').textContent = assunto;
+  // o topo não muda mais com a família: quem diz onde se está são as abas
 }
 
 /* ============================================================
@@ -7736,14 +8339,18 @@ function aplicarModo() {
 
   $('listaEnsaios').innerHTML = m.ensaios
     .map(([nome, norma]) => `<li>${nome}<span class="norma">${norma}</span></li>`).join('');
-  $('chipModo').textContent = ROTULO_CURTO[estado.modo];
 }
 
 /** Abas que dispensam a barra de lançamento do rodapé. */
-const ABAS_SEM_RODAPE = ['historico'];
+const ABAS_SEM_RODAPE = ['historico', 'analise', 'equipamentos'];
 
 function irParaAba(chave) {
   document.body.classList.toggle('sem-rodape', ABAS_SEM_RODAPE.includes(chave));
+  // a barra de cima rola: a aba escolhida tem de vir para a vista sozinha
+  const bt = document.querySelector(`.nav-topo [data-aba="${chave}"]`);
+  if (bt) bt.scrollIntoView({ inline: 'center', block: 'nearest' });
+  // a análise lê o histórico: refaz ao entrar, senão mostra o de antes do último salvamento
+  if (chave === 'analise' && typeof montarAnalise === 'function') montarAnalise();
   document.querySelectorAll('nav button[data-aba]').forEach(b =>
     b.classList.toggle('ativo', b.dataset.aba === chave));
   document.querySelectorAll('section.aba').forEach(s =>
@@ -12102,6 +12709,7 @@ iniciarNuvem();
 iniciarTema();
 iniciarMarca();
 conferirModoComputador();
+ligarAnalise();
 ligarAtualizacao();
 registrarAtualizacao();
 
