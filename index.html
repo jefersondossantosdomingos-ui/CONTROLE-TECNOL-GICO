@@ -1312,12 +1312,15 @@ summary:hover{color:var(--text);}
   </div>
 
   <div class="card">
-    <h2>Onde isso é usado <span class="tag">Vale para todas as famílias</span></h2>
+    <h2>Este cadastro se guarda sozinho
+      <span class="tag" id="equipGuardado">Guardado neste aparelho</span></h2>
     <p class="hint" style="margin:0">
-      O que está cadastrado aqui aparece nas listas de escolha dos ensaios: o cilindro na
-      compactação e no ISC, a cápsula em toda umidade, o frasco na massa específica in situ.
-      Cadastrar uma vez evita redigitar tara e volume em cada ensaio — e evita o erro de
-      digitar um número diferente do que está gravado no equipamento.
+      Não há botão de salvar aqui: cilindro, cápsula e frasco são o inventário da bancada,
+      não dado de ensaio — cada alteração já fica guardada no aparelho e volta na próxima
+      vez que o app abrir. O que está cadastrado aparece nas listas de escolha dos ensaios:
+      o cilindro na compactação e no ISC, a cápsula em toda umidade, o frasco na massa
+      específica in situ. Isso evita redigitar tara e volume a cada ensaio — e evita o erro
+      de digitar um número diferente do que está gravado no equipamento.
     </p>
   </div>
 </section>
@@ -3847,6 +3850,7 @@ function ligarCadastro() {
       }
       montarEquipamentos();
       resincronizarEquipamentos();
+      guardarEquipamentos();
       atualizar();
     });
   });
@@ -3862,6 +3866,7 @@ function adicionarEquipamento(chave) {
   estado.equip[chave].push(TABELAS_EQUIP[chave].novo());
   montarEquipamentos();
   resincronizarEquipamentos();
+  guardarEquipamentos();
   atualizar();
 }
 
@@ -3871,6 +3876,7 @@ function removerEquipamento(chave, i) {
   lista.splice(i, 1);
   montarEquipamentos();
   resincronizarEquipamentos();
+  guardarEquipamentos();
   atualizar();
 }
 
@@ -6580,8 +6586,7 @@ const FICHAS = {
     nome: 'solos',
     bloco: 'medicao',
     naoRepete: ['registro', 'furo', 'dataEnsaio', 'mes', 'ano'],
-    equip: true,          // cilindros, cápsulas e frascos moram em estado.equip
-    conta: 'a obra, o material, a equipe e o cadastro de equipamentos',
+    conta: 'a obra, o material e a equipe',
     naoGuarda: 'o registro, a estaca de coleta e a data',
   },
   cauq: {
@@ -6607,6 +6612,34 @@ const FICHAS = {
     naoGuarda: 'o registro, o RG e a data',
   },
 };
+
+/* ============================================================
+   CADASTRO DE EQUIPAMENTOS
+   Cilindros, cápsulas e frascos não são dado de ensaio: são o
+   inventário da bancada. Não têm versão "deste ensaio", então não
+   faz sentido pedir para salvar — guardam-se sozinhos, a cada
+   alteração feita na tela.
+   ============================================================ */
+
+const FICHA_EQUIP = 'equipamentos';
+
+/** Chamado pelos três gestos que mexem no cadastro: digitar, somar e remover. */
+function guardarEquipamentos() {
+  const tudo = lerFichas();
+  tudo[FICHA_EQUIP] = {
+    equip: JSON.parse(JSON.stringify(estado.equip || {})),
+    guardadoEm: new Date().toISOString(),
+  };
+  gravarFichas(tudo);
+  const el = $('equipGuardado');
+  if (el) el.textContent = `Guardado neste aparelho às ${horaCurta(new Date())}`;
+}
+
+/** "23:41" — o suficiente para o operador ver que o toque dele pegou. */
+function horaCurta(d) {
+  const p = x => String(x).padStart(2, '0');
+  return `${p(d.getHours())}:${p(d.getMinutes())}`;
+}
 
 /* ------------------------------------------------------------
    Guardar e repor
@@ -6640,7 +6673,6 @@ function salvarFicha(chave) {
 
   const ficha = { campos: semOsQueMudam(estado[F.bloco], F.naoRepete) };
 
-  if (F.equip) ficha.equip = JSON.parse(JSON.stringify(estado.equip || {}));
   if (F.materiais) {
     // só a identidade do insumo; nada de resultado de ensaio
     ficha.materiais = ((estado.insumos || {}).materiais || [])
@@ -6678,19 +6710,23 @@ function esquecerFicha(chave) {
  */
 function aplicarFichas() {
   const tudo = lerFichas();
+
+  /* o cadastro de equipamentos vem primeiro, e aceita as duas moradas: a de
+     hoje e a antiga, de quando ele viajava junto com a ficha de solos */
+  const doInventario = (tudo[FICHA_EQUIP] || {}).equip
+    || ((tudo.solos || {}).equip);
+  if (doInventario) {
+    ['cilindros', 'capsulas', 'frascos'].forEach(l => {
+      if (Array.isArray(doInventario[l]) && doInventario[l].length) {
+        estado.equip[l] = JSON.parse(JSON.stringify(doInventario[l]));
+      }
+    });
+  }
+
   Object.entries(FICHAS).forEach(([chave, F]) => {
     const f = tudo[chave];
     if (!f) return;
     Object.assign(estado[F.bloco], f.campos || {});
-    if (F.equip && f.equip) {
-      // só troca a lista que veio com conteúdo: ficha antiga sem frascos não
-      // deve apagar os frascos que o app traz de fábrica
-      ['cilindros', 'capsulas', 'frascos'].forEach(l => {
-        if (Array.isArray(f.equip[l]) && f.equip[l].length) {
-          estado.equip[l] = JSON.parse(JSON.stringify(f.equip[l]));
-        }
-      });
-    }
     if (F.materiais && Array.isArray(f.materiais) && f.materiais.length) {
       estado.insumos.materiais = f.materiais.map(m => ({ ...m }));
     }
