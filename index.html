@@ -2583,7 +2583,7 @@ summary:hover{color:var(--text);}
     <div id="insAvisos" style="margin-top:14px"></div>
   </div>
 
-  <div class="card" data-fam="cauq">
+  <div class="card" data-fam="cauq" data-modos="marshall">
     <h2>Enquadramento nos requisitos <span class="tag" id="cqVeredito">—</span></h2>
     <p class="hint" style="margin:0 0 14px">
       Tabelas 4 e 5 da DNIT 031/2024. O VAM mínimo depende do tamanho nominal máximo
@@ -2591,6 +2591,20 @@ summary:hover{color:var(--text);}
     </p>
     <div class="requisitos" id="cqRequisitos"></div>
     <div id="cqAvisos" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card" data-fam="cauq" data-modos="sondagem">
+    <h2>Aceitação do lote <span class="tag" id="sdVeredito">—</span></h2>
+    <p class="hint" style="margin:0 0 14px">
+      DNIT 031/2024. O que a norma cobra não é a média: é a média descontada do
+      desvio-padrão multiplicado pelo coeficiente <b>k</b>, que cresce quando se
+      amostra pouco.
+    </p>
+    <div class="tiles" id="sdTilesResumo"></div>
+    <div class="requisitos" id="sdRequisitosResumo" style="margin-top:14px"></div>
+    <h2 style="margin-top:18px">Furos fora dos limites</h2>
+    <div class="requisitos" id="sdForaResumo"></div>
+    <div id="sdAvisosResumo" style="margin-top:14px"></div>
   </div>
 
   <div class="card" id="agendaCard">
@@ -3877,6 +3891,10 @@ function calcularSondagem(entrada) {
 
   const espessura = estatisticaDaSerie(cps.map(c => c.espessura), k);
   const gc = estatisticaDaSerie(cps.map(c => c.grauCompactacao), k);
+  /* densidade e vazios não têm resultado estatístico cobrado por norma — entram
+     como média do lote, que é o que o resumo do ensaio mostra */
+  const densidade = estatisticaDaSerie(cps.map(c => c.densidade), k);
+  const vazios = estatisticaDaSerie(cps.map(c => c.vazios), k);
 
   const atendeEspessura = espessura && ehNumero(espessura.resultado)
     ? espessura.resultado >= espessuraMinima : null;
@@ -3920,7 +3938,7 @@ function calcularSondagem(entrada) {
   return {
     densidadeAgua, coeficienteK: k,
     corposDeProva: cps,
-    espessura, gc, fora,
+    espessura, gc, densidade, vazios, fora,
     atendeEspessura, atendeGc,
     atende: (atendeEspessura === null || atendeGc === null)
       ? null : (atendeEspessura && atendeGc),
@@ -5803,18 +5821,30 @@ function ligarSondagem() {
   }
 }
 
-/** Preenche os quadros de resultado da aba. */
+/**
+ * Preenche os quadros de resultado — os da aba do ensaio e os do Resumo.
+ *
+ * São os mesmos números nos dois lugares. Escrever nos dois pelo mesmo caminho
+ * evita o que já aconteceu antes: um lado atualizar e o outro ficar mostrando o
+ * cálculo anterior.
+ */
+function pintarSondagem(id, html) {
+  [$(id), $(id + 'Resumo')].forEach(el => { if (el) el.innerHTML = html; });
+}
+
 function mostrarSondagem(r) {
   const n = (v, d, u = '') => v === null || v === undefined
     ? '—' : `${fmt(v, d)}${u ? `<span class="u">${u}</span>` : ''}`;
 
-  $('sdTiles').innerHTML = [
-    ['Furos', n(r.corposDeProva.length, 0), ''],
+  pintarSondagem('sdTiles', [
+    ['Densidade média', n(r.densidade ? r.densidade.media : null, 3), 'g/cm³'],
+    ['Vazios', n(r.vazios ? r.vazios.media : null, 2), '%'],
     ['Espessura média', n(r.espessura ? r.espessura.media : null, 2), 'cm'],
-    ['GC médio', n(r.gc ? r.gc.media : null, 2), '%'],
+    ['G.C. médio', n(r.gc ? r.gc.media : null, 2), '%'],
+    ['Furos', n(r.corposDeProva.length, 0), ''],
     ['Coeficiente k', n(r.coeficienteK, 3), ''],
   ].map(([k, v]) => `<div class="tile"><span class="k">${k}</span>
-      <span class="v">${v}</span></div>`).join('');
+      <span class="v">${v}</span></div>`).join(''));
 
   const linha = (rot, est, minimo, un, atende) => {
     if (!est) return '';
@@ -5824,19 +5854,25 @@ function mostrarSondagem(r) {
       <span class="lim">média ${fmt(est.media, 2)} − k × desvio ${fmt(est.desvio, 3)}
         · mínimo ${fmt(minimo, 2)} ${un}</span></div>`;
   };
-  $('sdRequisitos').innerHTML =
+  pintarSondagem('sdRequisitos',
     linha('Espessura — resultado estatístico', r.espessura, r.limites.espessuraMinima,
           'cm', r.atendeEspessura)
     + linha('Grau de compactação — resultado estatístico', r.gc, r.limites.gcMinimo,
-            '%', r.atendeGc);
+            '%', r.atendeGc));
 
-  $('sdFora').innerHTML =
+  const selo = $('sdVeredito');
+  if (selo) {
+    selo.textContent = r.atende === null ? '—' : r.atende ? 'atende' : 'não atende';
+    selo.className = 'tag' + (r.atende === false ? ' pendente' : '');
+  }
+
+  pintarSondagem('sdFora',
     [['Espessura abaixo do projeto', r.fora.espessuraAbaixo],
      ['Espessura acima do projeto',  r.fora.espessuraAcima],
      [`GC abaixo de ${fmt(r.limites.gcMinimo, 0)} %`, r.fora.gcAbaixo],
      [`GC acima de ${fmt(r.limites.gcMaximo, 0)} %`,  r.fora.gcAcima]]
       .map(([k, v]) => `<div class="req${v ? ' nao' : ''}">
-        <span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+        <span class="k">${k}</span><span class="v">${v}</span></div>`).join(''));
 
   $('tbSondagemCalc').innerHTML = r.corposDeProva.map((c, i) => `
     <tr>
@@ -5851,8 +5887,8 @@ function mostrarSondagem(r) {
       <td class="forte">${fmt(c.grauCompactacao, 2)}</td>
     </tr>`).join('');
 
-  $('sdAvisos').innerHTML = r.avisos.map(a =>
-    `<div class="aviso"><span class="ico">!</span><span>${a}</span></div>`).join('');
+  pintarSondagem('sdAvisos', r.avisos.map(a =>
+    `<div class="aviso"><span class="ico">!</span><span>${a}</span></div>`).join(''));
 }
 
 /* ------------------------------------------------------------
@@ -5925,6 +5961,11 @@ function folhaSondagem(pacote, pagina = 1, total = 1) {
         <td class="num">${r.corposDeProva.length}</td><td class="un2">furos</td></tr>
       <tr><td class="rot">Coeficiente k</td>
         <td class="num">${num(r.coeficienteK, 3)}</td><td class="un2"></td></tr>
+      <tr><td class="rot">Densidade aparente média da pista</td>
+        <td class="num forte">${num(r.densidade && r.densidade.media, 3)}</td>
+        <td class="un2">g/cm³</td></tr>
+      <tr><td class="rot">Vazios médios da pista</td>
+        <td class="num">${num(r.vazios && r.vazios.media, 2)}</td><td class="un2">%</td></tr>
       <tr><td class="rot">Espessura média</td>
         <td class="num">${num(r.espessura && r.espessura.media, 2)}</td><td class="un2">cm</td></tr>
       <tr><td class="rot">Desvio-padrão da espessura</td>
@@ -8966,6 +9007,23 @@ const MODOS = {
       ['Equivalente de areia',              'DNER-ME 054/94'],
     ],
   },
+};
+
+/**
+ * Onde cada tipo de ensaio começa a ser preenchido.
+ *
+ * É para onde o botão "Editar" do histórico leva: a primeira aba de lançamento
+ * daquele ensaio. Cair em Dados obrigava a procurar a aba certa na barra de
+ * baixo, com o ensaio já carregado e nenhuma pista de onde ele estava.
+ */
+const ABA_DO_MODO = {
+  simples:        'amostra',
+  caracterizacao: 'amostra',
+  completo:       'amostra',
+  marshall:       'cqbetume',
+  sondagem:       'sondagem',
+  concreto:       'cbpeca',
+  insumos:        'infinura',
 };
 
 /** Rótulo curto para o chip do cabeçalho. */
@@ -12115,12 +12173,17 @@ function resumoDoCalculo(c) {
   }
   if (cauq && estado.modo === 'sondagem') {
     const q = c.sondagem;
+    const med = x => q && q[x] ? q[x].media : null;
     return { ...base,
-      furos: q ? q.corposDeProva.length : null,
-      esp:   q && q.espessura ? q.espessura.resultado : null,
-      gcRes: q && q.gc ? q.gc.resultado : null,
-      k:     q ? q.coeficienteK : null,
-      atende: q ? q.atende : null,
+      furos:     q ? q.corposDeProva.length : null,
+      densidade: med('densidade'),
+      vaziosSd:  med('vazios'),
+      espMedia:  med('espessura'),
+      gcMedia:   med('gc'),
+      esp:       q && q.espessura ? q.espessura.resultado : null,
+      gcRes:     q && q.gc ? q.gc.resultado : null,
+      k:         q ? q.coeficienteK : null,
+      atende:    q ? q.atende : null,
     };
   }
   if (cauq) {
@@ -12236,11 +12299,18 @@ function salvarEnsaio() {
   setTimeout(() => { const e = $('salvoAviso'); if (e) e.innerHTML = ''; }, 6000);
 }
 
+/**
+ * Abre um ensaio salvo para continuar de onde parou.
+ *
+ * Cai na aba do ensaio, não na de dados: quem clica em "Editar" no histórico
+ * quer mexer nos números do ensaio, e a obra já estava preenchida quando ele
+ * foi salvo. Levar para Dados obrigava a procurar a aba certa na barra de baixo.
+ */
 function editarEnsaio(id) {
   const e = historico.find(x => x.id === id);
   if (!e) return;
   aplicarEnsaio(e.foto);
-  irParaAba('dados');
+  irParaAba(ABA_DO_MODO[estado.modo] || 'dados');
 }
 
 /** Deixa aberta a lista onde o ensaio aparece — usado depois de salvar. */
@@ -12430,6 +12500,13 @@ function cartoesDoHistorico(lista) {
       ['Atingido',  r.pct === null ? '—' : num(r.pct, 0), r.pct === null ? '' : '% do fck'],
       ['Corpos de prova', num(r.cps, 0), `em ${num(r.idades, 0)} idades`],
       ['Resultado', r.atende === null ? 'à romper' : (r.atende ? 'atende' : 'não atende'), ''],
+    ] : r.modo === 'sondagem' ? [
+      ['Densidade média', num(r.densidade, 3), 'g/cm³'],
+      ['Vazios',          num(r.vaziosSd, 2),  '%'],
+      ['Espessura média', num(r.espMedia, 2),  'cm'],
+      ['G.C. médio',      num(r.gcMedia, 2),   '%'],
+      ['Amostras',        num(r.furos, 0),     `furos · k ${num(r.k, 3)}`],
+      ...(r.atende === null ? [] : [['Resultado', r.atende ? 'atende' : 'não atende', '']]),
     ] : r.familia === 'cauq' ? [
       ['Teor de CAP', num(r.teor, 2), '%'],
       ['Vazios',      num(r.vv, 2),   '%'],
