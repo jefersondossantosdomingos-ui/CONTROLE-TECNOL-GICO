@@ -1072,23 +1072,23 @@ summary:hover{color:var(--text);}
     <span class="chip ok"><span class="dot"></span>Calculando</span>
   </div>
   <nav class="nav-topo">
-<button type="button" class="ativo" data-aba="dados" data-modos="simples caracterizacao completo marshall concreto insumos">
+<button type="button" class="ativo" data-aba="dados" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
     <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
     Dados
   </button>
-<button type="button" data-aba="ensaio" data-modos="simples caracterizacao completo marshall concreto insumos">
+<button type="button" data-aba="ensaio" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
     <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
     Ensaio
   </button>
-<button type="button" data-aba="historico" data-modos="simples caracterizacao completo marshall concreto insumos">
+<button type="button" data-aba="historico" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
     <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M8 13h8"/></svg>
     Histórico
   </button>
-<button type="button" data-aba="analise" data-modos="simples caracterizacao completo marshall concreto insumos">
+<button type="button" data-aba="analise" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
     <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
     Análise
   </button>
-<button type="button" data-aba="equipamentos" data-modos="simples caracterizacao completo marshall concreto insumos">
+<button type="button" data-aba="equipamentos" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
     <svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4z"/></svg>
     Equipam.
   </button>
@@ -1098,7 +1098,7 @@ summary:hover{color:var(--text);}
 <div class="wrap">
 
 <!-- ============ ABA 0 · INSERIR DADOS ============ -->
-<section class="aba ativa" id="aba-dados" data-modos="simples caracterizacao completo marshall concreto insumos">
+<section class="aba ativa" id="aba-dados" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
 
   <div class="card">
     <h2>Quais dados <span class="tag">Cada família tem os seus</span></h2>
@@ -1150,28 +1150,19 @@ summary:hover{color:var(--text);}
 
 
   <div class="card" data-bloco="cauq">
-    <h2>Obra e contratos <span class="tag">Cabeçalho da folha de CAUQ</span></h2>
+    <h2>Obra e equipe <span class="tag">Cabeçalho da folha de CAUQ</span></h2>
     <div class="grid4" id="gpObraQ"></div>
     <div class="grid4" id="gpContratoQ" style="margin-top:11px"></div>
+    <p class="hint">
+      São os campos do cabeçalho das planilhas de origem — a do Marshall e a da sondagem
+      rotativa. O que o cálculo já sabe não se digita aqui: teor, Rice e faixa de projeto
+      ficam na dosagem, e a folha os lê de lá.
+    </p>
   </div>
 
   <div class="card" data-bloco="cauq">
     <h2>Identificação do ensaio <span class="tag">Muda a cada amostra</span></h2>
     <div class="grid4" id="gpEnsaioQ"></div>
-  </div>
-
-  <div class="card" data-bloco="cauq">
-    <h2>Parâmetros de projeto <span class="tag">Referência do laudo</span></h2>
-    <div class="grid4" id="gpProjetoQ"></div>
-    <p class="hint">
-      Vêm do projeto da mistura e servem de referência no cabeçalho da folha. O teor obtido
-      no ensaio é comparado com o teor de projeto, com tolerância de ±0,3 %.
-    </p>
-  </div>
-
-  <div class="card" data-bloco="cauq">
-    <h2>Origem dos materiais <span class="tag">Procedência</span></h2>
-    <div class="grid4" id="gpOrigemQ"></div>
   </div>
 
   <div class="card" data-bloco="cauq">
@@ -1273,7 +1264,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ ABA · EQUIPAMENTOS ============ -->
-<section class="aba" id="aba-equipamentos" data-modos="simples caracterizacao completo marshall concreto insumos">
+<section class="aba" id="aba-equipamentos" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
   <div class="card">
     <h2>Cadastro de equipamentos <span class="tag">Cilindros, cápsulas e frascos</span></h2>
     <p class="hint" style="margin:0 0 14px">
@@ -1315,7 +1306,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ ABA · ANÁLISE ============ -->
-<section class="aba" id="aba-analise" data-modos="simples caracterizacao completo marshall concreto insumos">
+<section class="aba" id="aba-analise" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
 
   <div class="card">
     <h2>Recorte da análise <span class="tag">Vale para tudo nesta aba</span></h2>
@@ -1365,7 +1356,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ ABA 1 · TIPO DE ENSAIO ============ -->
-<section class="aba" id="aba-ensaio" data-modos="simples caracterizacao completo marshall concreto insumos">
+<section class="aba" id="aba-ensaio" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
   <div class="card">
     <h2>Família de ensaios <span class="tag">Material</span></h2>
     <div class="familias" id="familias"></div>
@@ -1409,7 +1400,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ ABA · HISTÓRICO ============ -->
-<section class="aba" id="aba-historico" data-modos="simples caracterizacao completo marshall concreto insumos">
+<section class="aba" id="aba-historico" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
   <div class="card" id="cardNuvem">
     <h2>
       <button type="button" class="abre-lista abre-painel" id="nuvemSeta" data-painel-nuvem="1">
@@ -1984,7 +1975,7 @@ summary:hover{color:var(--text);}
 
 <!-- ============ ABA 8 · RESULTADO ============ -->
 <!-- ============ CAUQ · BETUME ============ -->
-<section class="aba" id="aba-cqbetume" data-fam="cauq">
+<section class="aba" id="aba-cqbetume" data-fam="cauq" data-modos="marshall">
   <div class="card">
     <h2>Temperaturas <span class="tag">Registro de pista</span></h2>
     <div class="grid2">
@@ -2041,7 +2032,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ CAUQ · GRANULOMETRIA DA MISTURA ============ -->
-<section class="aba" id="aba-cqgranul" data-fam="cauq">
+<section class="aba" id="aba-cqgranul" data-fam="cauq" data-modos="marshall">
   <div class="card">
     <h2>Granulometria da mistura extraída <span class="tag">DNIT 412/2019</span></h2>
     <p class="hint" style="margin:0 0 14px">
@@ -2073,7 +2064,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ CAUQ · RICE ============ -->
-<section class="aba" id="aba-cqrice" data-fam="cauq">
+<section class="aba" id="aba-cqrice" data-fam="cauq" data-modos="marshall">
   <div class="card">
     <h2>Densidade máxima medida <span class="tag">Rice test · DNIT 427/2020</span></h2>
     <div class="grid2">
@@ -2107,7 +2098,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ CAUQ · MARSHALL ============ -->
-<section class="aba" id="aba-cqmarshall" data-fam="cauq">
+<section class="aba" id="aba-cqmarshall" data-fam="cauq" data-modos="marshall">
   <div class="card">
     <h2>Corpos de prova <span class="tag">DNIT 447/2024</span></h2>
     <div class="tabwrap">
@@ -2143,7 +2134,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ CAUQ · TRAÇÃO ============ -->
-<section class="aba" id="aba-cqtracao" data-fam="cauq">
+<section class="aba" id="aba-cqtracao" data-fam="cauq" data-modos="marshall">
   <div class="card">
     <h2>Resistência à tração por compressão diametral <span class="tag">DNIT 136/2018</span></h2>
     <div class="tabwrap">
@@ -2163,7 +2154,7 @@ summary:hover{color:var(--text);}
 </section>
 
 <!-- ============ CAUQ · EQUIVALENTE DE AREIA ============ -->
-<section class="aba" id="aba-cqareia" data-fam="cauq">
+<section class="aba" id="aba-cqareia" data-fam="cauq" data-modos="marshall">
   <div class="card">
     <h2>Equivalente de areia da mistura <span class="tag">DNIT 450/2024</span></h2>
     <div class="tabwrap">
@@ -2180,6 +2171,91 @@ summary:hover{color:var(--text);}
       <div class="tile destaque"><div class="k">EA de laudo</div><div class="v" id="cqEaLaudo">—</div></div>
     </div>
     <p class="hint">A norma manda arredondar o equivalente de areia para o inteiro superior.</p>
+  </div>
+</section>
+
+<!-- ============ CAUQ · SONDAGEM COM SONDA ROTATIVA ============ -->
+<section class="aba" id="aba-sondagem" data-fam="cauq" data-modos="sondagem">
+  <div class="card">
+    <h2>Condições do lote <span class="tag">Valem para todos os furos</span></h2>
+    <div class="grid4">
+      <div><label>Temperatura da água (°C)</label>
+        <input type="number" id="sdTempAgua" step="1" inputmode="numeric"></div>
+      <div><label>Rice do dia (g/cm³)</label>
+        <input type="number" id="sdRice" step="0.001" inputmode="decimal"></div>
+      <div><label>Marshall do dia (g/cm³)</label>
+        <input type="number" id="sdMarshall" step="0.001" inputmode="decimal"></div>
+      <div><label>Espessura de projeto (cm)</label>
+        <input type="number" id="sdEspProjeto" step="0.1" inputmode="decimal"></div>
+    </div>
+    <p class="hint">
+      A densidade medida por imersão depende da água em que se pesou: água quente empurra
+      menos e o corpo de prova parece mais pesado do que é. O app corrige pela temperatura
+      que você digitar aqui.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Critérios de aceitação <span class="tag">DNIT 031/2024</span></h2>
+    <div class="grid3">
+      <div><label>Espessura mínima (cm)</label>
+        <input type="number" id="sdEspMinima" step="0.1" inputmode="decimal"></div>
+      <div><label>G.C. mínimo (%)</label>
+        <input type="number" id="sdGcMinimo" step="0.1" inputmode="decimal"></div>
+      <div><label>G.C. máximo (%)</label>
+        <input type="number" id="sdGcMaximo" step="0.1" inputmode="decimal"></div>
+    </div>
+    <p class="hint">
+      O que a norma cobra não é a média: é a média descontada do desvio-padrão multiplicado
+      pelo coeficiente <b>k</b>, que cresce quando se amostra pouco.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Resultado do lote</h2>
+    <div class="tiles" id="sdTiles"></div>
+    <div class="requisitos" id="sdRequisitos" style="margin-top:14px"></div>
+    <div id="sdAvisos"></div>
+    <div style="display:flex; gap:9px; flex-wrap:wrap; margin-top:14px">
+      <button class="btn" id="btnImprimirSondagem" type="button">Gerar relatório em PDF</button>
+      <button class="btn ghost" id="btnAddSondagem" type="button">+ Furo</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Furos fora dos limites</h2>
+    <div class="requisitos" id="sdFora"></div>
+  </div>
+
+  <div class="card">
+    <h2>Corpos de prova extraídos</h2>
+    <div class="tabwrap">
+      <table class="t-form">
+        <thead><tr>
+          <th>CP nº</th><th>Estaca</th><th>Camada</th><th>Pos.</th>
+          <th>Aplicação</th><th>Extração</th><th>Espessura (cm)</th>
+          <th>Peso ao ar (g)</th><th>Peso imerso (g)</th><th>Peso s.s.s. (g)</th><th></th>
+        </tr></thead>
+        <tbody id="tbSondagem"></tbody>
+      </table>
+    </div>
+    <p class="hint">
+      O volume sai do empuxo — o peso com a superfície saturada menos o peso imerso. Por isso
+      os três pesos são obrigatórios em cada furo.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Cálculo furo a furo</h2>
+    <div class="tabwrap">
+      <table class="t-form">
+        <thead><tr>
+          <th>CP</th><th>Estaca</th><th>Pos.</th><th>Espes. (cm)</th><th>Volume (cm³)</th>
+          <th>Densidade (g/cm³)</th><th>Água absorv. (%)</th><th>Vazios (%)</th><th>G.C. (%)</th>
+        </tr></thead>
+        <tbody id="tbSondagemCalc"></tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -2495,7 +2571,7 @@ summary:hover{color:var(--text);}
   </div>
 </section>
 
-<section class="aba" id="aba-resultado" data-modos="simples caracterizacao completo marshall concreto insumos">
+<section class="aba" id="aba-resultado" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
 
   <div class="card" data-fam="insumos">
     <h2>Caracterização dos insumos <span class="tag" id="insVeredito">—</span></h2>
@@ -2634,29 +2710,33 @@ summary:hover{color:var(--text);}
     <svg viewBox="0 0 24 24"><path d="M5 3h14v5l-5 4v9h-4v-9L5 8z"/></svg>
     Sediment.
   </button>
-    <button type="button" data-aba="cqbetume" data-fam="cauq">
+    <button type="button" data-aba="cqbetume" data-fam="cauq" data-modos="marshall">
     <svg viewBox="0 0 24 24"><path d="M7 3h10v5l-3 3v10H10V11L7 8z"/><path d="M9 15h6"/></svg>
     Betume
   </button>
-  <button type="button" data-aba="cqgranul" data-fam="cauq">
+  <button type="button" data-aba="cqgranul" data-fam="cauq" data-modos="marshall">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
     Granul.
   </button>
-  <button type="button" data-aba="cqrice" data-fam="cauq">
+  <button type="button" data-aba="cqrice" data-fam="cauq" data-modos="marshall">
     <svg viewBox="0 0 24 24"><path d="M6 2h12"/><path d="M9 2v6l-4 8a3 3 0 0 0 3 4h8a3 3 0 0 0 3-4l-4-8V2"/></svg>
     Rice
   </button>
-  <button type="button" data-aba="cqmarshall" data-fam="cauq">
+  <button type="button" data-aba="cqmarshall" data-fam="cauq" data-modos="marshall">
     <svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M8 6l4-3 4 3"/><rect x="5" y="11" width="14" height="8" rx="2"/><path d="M3 21h18"/></svg>
     Marshall
   </button>
-  <button type="button" data-aba="cqtracao" data-fam="cauq">
+  <button type="button" data-aba="cqtracao" data-fam="cauq" data-modos="marshall">
     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3"/></svg>
     Tração
   </button>
-  <button type="button" data-aba="cqareia" data-fam="cauq">
+  <button type="button" data-aba="cqareia" data-fam="cauq" data-modos="marshall">
     <svg viewBox="0 0 24 24"><path d="M5 3h14v5l-5 4v9h-4v-9L5 8z"/></svg>
     Areia
+  </button>
+  <button type="button" data-aba="sondagem" data-fam="cauq" data-modos="sondagem">
+    <svg viewBox="0 0 24 24"><path d="M12 2v8"/><circle cx="12" cy="13" r="4"/><path d="M4 21h16"/><path d="M8 17l-2 4M16 17l2 4"/></svg>
+    Sondagem
   </button>
     <button type="button" data-aba="cbpeca" data-fam="concreto">
     <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/></svg>
@@ -2690,7 +2770,7 @@ summary:hover{color:var(--text);}
     <svg viewBox="0 0 24 24"><path d="M8 3h8v5l-3 4v9h-2v-9L8 8z"/><path d="M9 16h6"/></svg>
     Eq. areia
   </button>
-  <button type="button" data-aba="resultado" data-modos="simples caracterizacao completo marshall concreto insumos">
+  <button type="button" data-aba="resultado" data-modos="simples caracterizacao completo marshall sondagem concreto insumos">
     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>
     Resumo
   </button>
@@ -3656,6 +3736,203 @@ function calcularInsumos(entrada) {
 })();
 
 /* ============================================================
+   NÚCLEO DE CÁLCULO — gerado de sondagem-nucleo.mjs pelo build.
+   Não edite aqui: mexa no .mjs, que é o mesmo arquivo conferido
+   por `node sondagem-verifica.mjs`.
+   ============================================================ */
+const SONDAGEM = (() => {
+/* ============================================================
+   SONDAGEM COM SONDA ROTATIVA — DNER-ME 117/94
+   Extrai-se um corpo de prova da pista pronta e pesa-se ao ar,
+   imerso e com a superfície saturada. Disso saem a densidade da
+   camada executada, o grau de compactação contra o Marshall do
+   dia e os vazios contra o Rice do dia.
+
+   Conferido contra "5-MATRIZ SONDAGEM COM A ROTATIVA.xlsx",
+   aba SONDAGEM, com os 19 corpos de prova lançados lá.
+   ============================================================ */
+
+const ehNumero = v => typeof v === 'number' && isFinite(v);
+const round = (v, d) => {
+  const f = 10 ** d;
+  return Math.round((v + Number.EPSILON) * f) / f;
+};
+const br = (v, d = 2) => ehNumero(v) ? round(v, d).toFixed(d).replace('.', ',') : '—';
+
+/**
+ * Densidade da água por temperatura, em g/cm³.
+ *
+ * A densidade aparente medida por imersão depende da água em que se pesou:
+ * água quente é menos densa e empurra menos, e o corpo de prova parece mais
+ * pesado do que é. Sem esta correção, o mesmo cilindro dá resultados
+ * diferentes conforme a hora do dia em que passou pelo tanque.
+ */
+const DENSIDADE_AGUA = {
+  15: 0.9991, 16: 0.9990, 17: 0.9988, 18: 0.9986, 19: 0.9984,
+  20: 0.9982, 21: 0.9980, 22: 0.9978, 23: 0.9976, 24: 0.9973,
+  25: 0.9971, 26: 0.9968, 27: 0.9965, 28: 0.9963, 29: 0.9960,
+  30: 0.9957, 31: 0.9954, 32: 0.9950, 33: 0.9947, 34: 0.9944, 35: 0.9941,
+};
+
+function densidadeDaAgua(temperatura) {
+  if (!ehNumero(temperatura)) return DENSIDADE_AGUA[25];
+  const t = Math.round(temperatura);
+  if (DENSIDADE_AGUA[t] !== undefined) return DENSIDADE_AGUA[t];
+  // fora da tabela, fica no extremo mais próximo em vez de inventar valor
+  return t < 15 ? DENSIDADE_AGUA[15] : DENSIDADE_AGUA[35];
+}
+
+/**
+ * Coeficiente k do controle estatístico, por número de amostras.
+ *
+ * Poucos furos dizem pouco sobre a camada inteira, e o k grande desconta mais
+ * o desvio — é o preço de amostrar pouco. Acima de 21 furos o desconto para
+ * de cair.
+ */
+const COEFICIENTE_K = {
+  1: 1.55, 2: 1.55, 3: 1.55, 4: 1.55, 5: 1.55, 6: 1.41, 7: 1.36,
+  8: 1.31, 9: 1.25, 10: 1.21, 11: 1.19, 12: 1.16, 13: 1.13, 14: 1.11,
+  15: 1.10, 16: 1.08, 17: 1.06, 18: 1.06, 19: 1.04, 20: 1.025, 21: 1.01,
+};
+
+function coeficienteK(n) {
+  if (!ehNumero(n) || n < 1) return null;
+  if (n > 24) return 1.01;
+  return COEFICIENTE_K[Math.round(n)] ?? 1.01;
+}
+
+/* ------------------------------------------------------------
+   Um corpo de prova
+   ------------------------------------------------------------ */
+
+/**
+ * @param cp        {pesoAr, pesoImerso, pesoSuperficieSaturada, espessura, ...}
+ * @param contexto  {densidadeAgua, riceDoDia, marshallDoDia}
+ */
+function calcularCorpoDeProva(cp, contexto) {
+  const { pesoAr: ar, pesoImerso: imerso, pesoSuperficieSaturada: sss } = cp;
+  const temTudo = ehNumero(ar) && ehNumero(imerso) && ehNumero(sss);
+
+  // o volume vem do empuxo: o que a água deslocou é o volume do corpo de prova
+  const volume = temTudo ? sss - imerso : null;
+  const podeDividir = ehNumero(volume) && volume > 0;
+
+  const densidade = podeDividir ? (ar / volume) * contexto.densidadeAgua : null;
+  // a água que entrou nos poros abertos, em relação ao volume
+  const aguaAbsorvida = podeDividir ? ((sss - ar) / volume) * 100 : null;
+
+  const rice = contexto.riceDoDia;
+  const marshall = contexto.marshallDoDia;
+
+  const vazios = (ehNumero(densidade) && ehNumero(rice) && rice > 0)
+    ? ((rice - densidade) / rice) * 100 : null;
+  const grauCompactacao = (ehNumero(densidade) && ehNumero(marshall) && marshall > 0)
+    ? (densidade / marshall) * 100 : null;
+
+  return {
+    ...cp,
+    volume, densidade, aguaAbsorvida, vazios, grauCompactacao,
+  };
+}
+
+/* ------------------------------------------------------------
+   O lote
+   ------------------------------------------------------------ */
+
+/** Média, desvio-padrão amostral e resultado estatístico de uma série. */
+function estatisticaDaSerie(valores, k) {
+  const v = valores.filter(ehNumero);
+  if (!v.length) return null;
+  const media = v.reduce((a, b) => a + b, 0) / v.length;
+  /* desvio AMOSTRAL (divide por n−1): os furos são uma amostra da camada, não
+     a camada inteira. Com um furo só não há desvio que se possa estimar. */
+  const desvio = v.length > 1
+    ? Math.sqrt(v.reduce((a, b) => a + (b - media) ** 2, 0) / (v.length - 1))
+    : 0;
+  return {
+    n: v.length, media, desvio,
+    // o que a norma cobra não é a média: é a média descontada do espalhamento
+    resultado: ehNumero(k) ? media - k * desvio : null,
+  };
+}
+
+function calcularSondagem(entrada) {
+  const {
+    corposDeProva = [],
+    temperaturaAgua = 25,
+    riceDoDia = null,
+    marshallDoDia = null,
+    espessuraProjeto = 5,
+    espessuraMinima = 4.5,
+    gcMinimo = 97,
+    gcMaximo = 101,
+  } = entrada;
+
+  const densidadeAgua = densidadeDaAgua(temperaturaAgua);
+  const contexto = { densidadeAgua, riceDoDia, marshallDoDia };
+
+  const cps = corposDeProva.map(cp => calcularCorpoDeProva(cp, contexto));
+  const comNumero = cps.filter(c => ehNumero(c.densidade));
+  const k = coeficienteK(comNumero.length);
+
+  const espessura = estatisticaDaSerie(cps.map(c => c.espessura), k);
+  const gc = estatisticaDaSerie(cps.map(c => c.grauCompactacao), k);
+
+  const atendeEspessura = espessura && ehNumero(espessura.resultado)
+    ? espessura.resultado >= espessuraMinima : null;
+  const atendeGc = gc && ehNumero(gc.resultado) ? gc.resultado >= gcMinimo : null;
+
+  /* contagens que a folha imprime — quantos furos ficaram fora de cada limite */
+  const conta = (lista, teste) => lista.filter(x => ehNumero(x) && teste(x)).length;
+  const espessuras = cps.map(c => c.espessura);
+  const gcs = cps.map(c => c.grauCompactacao);
+
+  const fora = {
+    espessuraAbaixo: conta(espessuras, x => x < espessuraProjeto),
+    espessuraAcima:  conta(espessuras, x => x > espessuraProjeto),
+    gcAbaixo: conta(gcs, x => x < gcMinimo),
+    gcAcima:  conta(gcs, x => x > gcMaximo),
+  };
+
+  const avisos = [];
+  if (!ehNumero(marshallDoDia) || marshallDoDia <= 0)
+    avisos.push('Sem o Marshall do dia não há grau de compactação: '
+      + 'é ele que diz qual densidade a pista deveria ter.');
+  if (!ehNumero(riceDoDia) || riceDoDia <= 0)
+    avisos.push('Sem o Rice do dia não há como calcular os vazios da pista.');
+  if (comNumero.length && comNumero.length < 6)
+    avisos.push(`Com ${comNumero.length} furo(s), o coeficiente k é 1,55 — o maior da `
+      + 'tabela. Amostrar pouco desconta mais do resultado, e é assim de propósito.');
+  if (ehNumero(riceDoDia) && ehNumero(marshallDoDia) && riceDoDia < marshallDoDia)
+    avisos.push(`O Rice do dia (${br(riceDoDia, 3)}) está abaixo do Marshall do dia `
+      + `(${br(marshallDoDia, 3)}). O Rice é a densidade sem vazio nenhum: ele não pode `
+      + 'ser menor. Confira qual dos dois foi trocado.');
+  cps.forEach((c, i) => {
+    if (ehNumero(c.pesoAr) && ehNumero(c.pesoSuperficieSaturada)
+        && c.pesoSuperficieSaturada < c.pesoAr)
+      avisos.push(`CP ${c.numero || i + 1}: o peso com superfície saturada está abaixo do `
+        + 'peso ao ar. A amostra saturada não pode pesar menos que a seca.');
+    if (ehNumero(c.aguaAbsorvida) && c.aguaAbsorvida > 5)
+      avisos.push(`CP ${c.numero || i + 1}: água absorvida de ${br(c.aguaAbsorvida)} %. `
+        + 'Acima de 5 % costuma indicar mistura muito aberta ou corpo de prova danificado.');
+  });
+
+  return {
+    densidadeAgua, coeficienteK: k,
+    corposDeProva: cps,
+    espessura, gc, fora,
+    atendeEspessura, atendeGc,
+    atende: (atendeEspessura === null || atendeGc === null)
+      ? null : (atendeEspessura && atendeGc),
+    limites: { espessuraProjeto, espessuraMinima, gcMinimo, gcMaximo },
+    avisos,
+  };
+}
+
+  return { COEFICIENTE_K, DENSIDADE_AGUA, calcularCorpoDeProva, calcularSondagem, coeficienteK, densidadeDaAgua };
+})();
+
+/* ============================================================
    CADASTRO DE EQUIPAMENTOS
    Cilindros, cápsulas e frascos de areia moram em estado.equip e
    são consultados por todos os ensaios. Cadastra-se uma vez.
@@ -4198,7 +4475,8 @@ function desenharTelaCauq() {
   $('cqBetUmid').innerHTML = n(r.betume.umidade, 3) + '<span class="u">%</span>';
   $('cqBetBruto').innerHTML = n(r.betume.bruto, 3) + '<span class="u">%</span>';
   $('cqBetTeor').innerHTML = n(r.betume.teor, 2) + '<span class="u">%</span>';
-  const desvio = r.betume.teor - estado.medicaoCauq.teorProjeto;
+  // o teor de projeto vem da dosagem, que é onde o cálculo o lê
+  const desvio = r.betume.teor - estado.cauq.dosagem.teorProjeto;
   $('cqBetDesvio').innerHTML = (desvio >= 0 ? '+' : '') + n(desvio, 2) + '<span class="u">pp</span>';
   $('cqBetTol').innerHTML = Math.abs(desvio) <= 0.3
     ? '<span class="badge ok">✓ dentro de ±0,3</span>'
@@ -5389,6 +5667,321 @@ function desenharBarrasMassaUnitaria(r, alvo) {
 }
 
 /* ============================================================
+   SONDAGEM COM SONDA ROTATIVA — tela e folha
+   O cálculo mora em sondagem-nucleo.mjs e entra aqui como
+   SONDAGEM pelo build. Aqui é só a tela.
+   ============================================================ */
+
+const SONDAGEM_PADRAO = {
+  /* condições do lote — valem para todos os furos do dia */
+  temperaturaAgua: 25,
+  riceDoDia: null,
+  marshallDoDia: null,
+  /* critérios de projeto */
+  espessuraProjeto: 5,
+  espessuraMinima: 4.5,
+  gcMinimo: 97,
+  gcMaximo: 101,
+  corposDeProva: [
+    { numero:'', dataAplicacao:'', dataExtracao:'', estaca:'', camada:'', posicao:'E',
+      espessura:null, pesoAr:null, pesoImerso:null, pesoSuperficieSaturada:null },
+  ],
+};
+
+const POSICOES_SONDAGEM = ['E', 'D', 'X'];
+
+/* ------------------------------------------------------------
+   Tela
+   ------------------------------------------------------------ */
+
+function montarSondagem() {
+  const s = estado.sondagem;
+
+  const campos = [
+    ['sdTempAgua',    'temperaturaAgua',  '1'],
+    ['sdRice',        'riceDoDia',        '0.001'],
+    ['sdMarshall',    'marshallDoDia',    '0.001'],
+    ['sdEspProjeto',  'espessuraProjeto', '0.1'],
+    ['sdEspMinima',   'espessuraMinima',  '0.1'],
+    ['sdGcMinimo',    'gcMinimo',         '0.1'],
+    ['sdGcMaximo',    'gcMaximo',         '0.1'],
+  ];
+  campos.forEach(([id, chave]) => {
+    const el = $(id);
+    if (el && document.activeElement !== el) el.value = s[chave] ?? '';
+  });
+
+  $('tbSondagem').innerHTML = s.corposDeProva.map((c, i) => `
+    <tr>
+      <td data-rot="CP nº"><input type="text" data-sd="numero" data-i="${i}"
+        value="${atr(c.numero)}"></td>
+      <td data-rot="Estaca"><input type="text" data-sd="estaca" data-i="${i}"
+        value="${atr(c.estaca)}"></td>
+      <td data-rot="Camada"><input type="text" data-sd="camada" data-i="${i}"
+        value="${atr(c.camada)}"></td>
+      <td data-rot="Posição"><select data-sd="posicao" data-i="${i}">${
+        POSICOES_SONDAGEM.map(p => `<option${p === c.posicao ? ' selected' : ''}>${p}</option>`)
+          .join('')}</select></td>
+      <td data-rot="Aplicação"><input type="date" data-sd="dataAplicacao" data-i="${i}"
+        value="${atr(c.dataAplicacao)}"></td>
+      <td data-rot="Extração"><input type="date" data-sd="dataExtracao" data-i="${i}"
+        value="${atr(c.dataExtracao)}"></td>
+      <td data-rot="Espessura (cm)"><input type="number" inputmode="decimal" step="0.1"
+        data-sd="espessura" data-i="${i}" value="${c.espessura ?? ''}"></td>
+      <td data-rot="Peso ao ar (g)"><input type="number" inputmode="decimal" step="0.01"
+        data-sd="pesoAr" data-i="${i}" value="${c.pesoAr ?? ''}"></td>
+      <td data-rot="Peso imerso (g)"><input type="number" inputmode="decimal" step="0.01"
+        data-sd="pesoImerso" data-i="${i}" value="${c.pesoImerso ?? ''}"></td>
+      <td data-rot="Peso s.s.s. (g)"><input type="number" inputmode="decimal" step="0.01"
+        data-sd="pesoSuperficieSaturada" data-i="${i}"
+        value="${c.pesoSuperficieSaturada ?? ''}"></td>
+      <td><button type="button" class="btn ghost sm" data-sddel="${i}">Remover</button></td>
+    </tr>`).join('');
+
+  ligarSondagem();
+}
+
+function ligarSondagem() {
+  document.querySelectorAll('[data-sd]').forEach(el => {
+    if (el.dataset.ligado) return;
+    el.dataset.ligado = '1';
+    const evento = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(evento, () => {
+      const cp = estado.sondagem.corposDeProva[+el.dataset.i];
+      if (!cp) return;
+      if (el.type === 'number') {
+        const v = parseFloat(el.value);
+        cp[el.dataset.sd] = Number.isFinite(v) ? v : null;
+      } else {
+        cp[el.dataset.sd] = el.value;
+      }
+      /* nada de redesenhar a tabela: o campo perderia o foco e o teclado
+         do celular fecharia a cada tecla */
+      atualizar();
+    });
+  });
+
+  document.querySelectorAll('[data-sddel]').forEach(b => {
+    if (b.dataset.ligado) return;
+    b.dataset.ligado = '1';
+    b.addEventListener('click', () => {
+      if (estado.sondagem.corposDeProva.length <= 1) return;
+      estado.sondagem.corposDeProva.splice(+b.dataset.sddel, 1);
+      montarSondagem();
+      atualizar();
+    });
+  });
+
+  [['sdTempAgua', 'temperaturaAgua'], ['sdRice', 'riceDoDia'],
+   ['sdMarshall', 'marshallDoDia'], ['sdEspProjeto', 'espessuraProjeto'],
+   ['sdEspMinima', 'espessuraMinima'], ['sdGcMinimo', 'gcMinimo'],
+   ['sdGcMaximo', 'gcMaximo']].forEach(([id, chave]) => {
+    const el = $(id);
+    if (!el || el.dataset.ligado) return;
+    el.dataset.ligado = '1';
+    el.addEventListener('input', () => {
+      const v = parseFloat(el.value);
+      estado.sondagem[chave] = Number.isFinite(v) ? v : null;
+      atualizar();
+    });
+  });
+
+  const add = $('btnAddSondagem');
+  if (add && !add.dataset.ligado) {
+    add.dataset.ligado = '1';
+    add.addEventListener('click', () => {
+      const ultimo = estado.sondagem.corposDeProva.slice(-1)[0] || {};
+      // o novo furo herda camada e datas: numa sondagem eles repetem
+      estado.sondagem.corposDeProva.push({
+        numero: '', estaca: '', camada: ultimo.camada || '', posicao: 'E',
+        dataAplicacao: ultimo.dataAplicacao || '', dataExtracao: ultimo.dataExtracao || '',
+        espessura: null, pesoAr: null, pesoImerso: null, pesoSuperficieSaturada: null,
+      });
+      montarSondagem();
+      atualizar();
+    });
+  }
+}
+
+/** Preenche os quadros de resultado da aba. */
+function mostrarSondagem(r) {
+  const n = (v, d, u = '') => v === null || v === undefined
+    ? '—' : `${fmt(v, d)}${u ? `<span class="u">${u}</span>` : ''}`;
+
+  $('sdTiles').innerHTML = [
+    ['Furos', n(r.corposDeProva.length, 0), ''],
+    ['Espessura média', n(r.espessura ? r.espessura.media : null, 2), 'cm'],
+    ['GC médio', n(r.gc ? r.gc.media : null, 2), '%'],
+    ['Coeficiente k', n(r.coeficienteK, 3), ''],
+  ].map(([k, v]) => `<div class="tile"><span class="k">${k}</span>
+      <span class="v">${v}</span></div>`).join('');
+
+  const linha = (rot, est, minimo, un, atende) => {
+    if (!est) return '';
+    return `<div class="req ${atende === null ? '' : atende ? 'ok' : 'nao'}">
+      <span class="k">${rot}</span>
+      <span class="v">${fmt(est.resultado, 2)}<i>${un}</i></span>
+      <span class="lim">média ${fmt(est.media, 2)} − k × desvio ${fmt(est.desvio, 3)}
+        · mínimo ${fmt(minimo, 2)} ${un}</span></div>`;
+  };
+  $('sdRequisitos').innerHTML =
+    linha('Espessura — resultado estatístico', r.espessura, r.limites.espessuraMinima,
+          'cm', r.atendeEspessura)
+    + linha('Grau de compactação — resultado estatístico', r.gc, r.limites.gcMinimo,
+            '%', r.atendeGc);
+
+  $('sdFora').innerHTML =
+    [['Espessura abaixo do projeto', r.fora.espessuraAbaixo],
+     ['Espessura acima do projeto',  r.fora.espessuraAcima],
+     [`GC abaixo de ${fmt(r.limites.gcMinimo, 0)} %`, r.fora.gcAbaixo],
+     [`GC acima de ${fmt(r.limites.gcMaximo, 0)} %`,  r.fora.gcAcima]]
+      .map(([k, v]) => `<div class="req${v ? ' nao' : ''}">
+        <span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+
+  $('tbSondagemCalc').innerHTML = r.corposDeProva.map((c, i) => `
+    <tr>
+      <td>${c.numero || i + 1}</td>
+      <td>${c.estaca || '—'}</td>
+      <td>${c.posicao || '—'}</td>
+      <td class="num">${fmt(c.espessura, 2)}</td>
+      <td class="num">${fmt(c.volume, 2)}</td>
+      <td class="forte">${fmt(c.densidade, 3)}</td>
+      <td class="num">${fmt(c.aguaAbsorvida, 2)}</td>
+      <td class="num">${fmt(c.vazios, 2)}</td>
+      <td class="forte">${fmt(c.grauCompactacao, 2)}</td>
+    </tr>`).join('');
+
+  $('sdAvisos').innerHTML = r.avisos.map(a =>
+    `<div class="aviso"><span class="ico">!</span><span>${a}</span></div>`).join('');
+}
+
+/* ------------------------------------------------------------
+   Folha
+   ------------------------------------------------------------ */
+
+function folhaSondagem(pacote, pagina = 1, total = 1) {
+  const r = pacote && pacote.sondagem;
+  if (!r) return [];
+  const m = estado.medicaoCauq || {};
+  const num = (v, d) => v === null || v === undefined ? '—' : fmt(v, d);
+
+  const linhas = r.corposDeProva.map((c, i) => `
+    <tr>
+      <td>${c.numero || i + 1}</td>
+      <td>${c.estaca || '—'}</td>
+      <td>${c.camada || '—'}</td>
+      <td>${c.posicao || '—'}</td>
+      <td class="num">${num(c.espessura, 2)}</td>
+      <td class="num">${num(c.pesoAr, 2)}</td>
+      <td class="num">${num(c.pesoImerso, 2)}</td>
+      <td class="num">${num(c.pesoSuperficieSaturada, 2)}</td>
+      <td class="num">${num(c.volume, 2)}</td>
+      <td class="num forte">${num(c.densidade, 3)}</td>
+      <td class="num">${num(c.aguaAbsorvida, 2)}</td>
+      <td class="num">${num(c.vazios, 2)}</td>
+      <td class="num forte">${num(c.grauCompactacao, 2)}</td>
+    </tr>`).join('');
+
+  const veredito = v => v === null ? '—' : v ? 'APROVADO' : 'REPROVADO';
+  const classe = v => v === null ? '' : v ? ' ace' : ' rej';
+
+  return [`
+  <div class="folha">
+    ${topoFolha({ titulo: 'Sondagem com Sonda Rotativa',
+                  sub: 'Densidade, espessura e grau de compactação da camada executada',
+                  norma: 'DNER-ME 117/94', pagina, total })}
+    ${cabecalhoObra()}
+
+    <div class="secao">Condições do lote</div>
+    <table class="pares">
+      <tr>
+        <td class="par"><span class="pk">Temperatura da água</span>
+          <span class="pv">${num(estado.sondagem.temperaturaAgua, 0)} °C</span></td>
+        <td class="par"><span class="pk">Densidade da água</span>
+          <span class="pv">${num(r.densidadeAgua, 4)}</span></td>
+        <td class="par"><span class="pk">Rice do dia</span>
+          <span class="pv">${num(estado.sondagem.riceDoDia, 3)}</span></td>
+        <td class="par"><span class="pk">Marshall do dia</span>
+          <span class="pv">${num(estado.sondagem.marshallDoDia, 3)}</span></td>
+        <td class="par"><span class="pk">Espessura de projeto</span>
+          <span class="pv">${num(r.limites.espessuraProjeto, 2)} cm</span></td>
+      </tr>
+    </table>
+
+    <div class="secao">Corpos de prova extraídos</div>
+    <table class="f">
+      <thead><tr>
+        <th>CP</th><th>Estaca</th><th>Camada</th><th>Pos.</th>
+        <th>Espes.<br>(cm)</th><th>Ar<br>(g)</th><th>Imerso<br>(g)</th><th>S.S.S.<br>(g)</th>
+        <th>Volume<br>(cm³)</th><th>Densidade<br>(g/cm³)</th><th>Água<br>(%)</th>
+        <th>Vazios<br>(%)</th><th>G.C.<br>(%)</th>
+      </tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+
+    <div class="secao">Controle estatístico — DNIT 031/2024</div>
+    <table class="f lista">
+      <tr><td class="rot">Número de amostras</td>
+        <td class="num">${r.corposDeProva.length}</td><td class="un2">furos</td></tr>
+      <tr><td class="rot">Coeficiente k</td>
+        <td class="num">${num(r.coeficienteK, 3)}</td><td class="un2"></td></tr>
+      <tr><td class="rot">Espessura média</td>
+        <td class="num">${num(r.espessura && r.espessura.media, 2)}</td><td class="un2">cm</td></tr>
+      <tr><td class="rot">Desvio-padrão da espessura</td>
+        <td class="num">${num(r.espessura && r.espessura.desvio, 3)}</td><td class="un2">cm</td></tr>
+      <tr class="destaque"><td class="rot">Resultado estatístico da espessura</td>
+        <td class="num forte">${num(r.espessura && r.espessura.resultado, 2)}</td>
+        <td class="un2">cm · mínimo ${num(r.limites.espessuraMinima, 2)}</td></tr>
+      <tr><td class="rot">Grau de compactação médio</td>
+        <td class="num">${num(r.gc && r.gc.media, 2)}</td><td class="un2">%</td></tr>
+      <tr><td class="rot">Desvio-padrão do G.C.</td>
+        <td class="num">${num(r.gc && r.gc.desvio, 3)}</td><td class="un2">%</td></tr>
+      <tr class="destaque"><td class="rot">Resultado estatístico do G.C.</td>
+        <td class="num forte">${num(r.gc && r.gc.resultado, 2)}</td>
+        <td class="un2">% · mínimo ${num(r.limites.gcMinimo, 2)}</td></tr>
+    </table>
+
+    <table class="f">
+      <tr>
+        <td class="rot">Situação da espessura</td>
+        <td class="forte${classe(r.atendeEspessura)}">${veredito(r.atendeEspessura)}</td>
+        <td class="rot">Situação do grau de compactação</td>
+        <td class="forte${classe(r.atendeGc)}">${veredito(r.atendeGc)}</td>
+        <td class="rot">Situação do produto</td>
+        <td class="forte${classe(r.atende)}">${veredito(r.atende)}</td>
+      </tr>
+    </table>
+
+    <div class="obs"><b>OBSERVAÇÕES:</b> ${m.observacoes
+      || 'A densidade da pista é corrigida pela densidade da água na temperatura do banho. '
+       + 'O resultado estatístico desconta do valor médio o desvio-padrão multiplicado pelo '
+       + 'coeficiente k, que depende do número de furos.'}</div>
+    ${assinaturasFolha()}
+  </div>`];
+}
+
+/* ------------------------------------------------------------
+   Cadeia de cálculo
+   ------------------------------------------------------------ */
+
+/** Lê o estado, calcula o lote, pinta a tela e devolve o resultado. */
+function atualizarSondagem() {
+  const s = estado.sondagem;
+  const r = SONDAGEM.calcularSondagem({
+    corposDeProva: s.corposDeProva,
+    temperaturaAgua: s.temperaturaAgua,
+    riceDoDia: s.riceDoDia,
+    marshallDoDia: s.marshallDoDia,
+    espessuraProjeto: s.espessuraProjeto,
+    espessuraMinima: s.espessuraMinima,
+    gcMinimo: s.gcMinimo,
+    gcMaximo: s.gcMaximo,
+  });
+  mostrarSondagem(r);
+  return r;
+}
+
+/* ============================================================
    NÚCLEO DE CÁLCULO (porte direto do TypeScript da Etapa 1)
    ============================================================ */
 
@@ -5798,35 +6391,32 @@ const PADRAO = {
     furo: '',
     dataEnsaio: new Date().toISOString().slice(0, 10),
   },
-  /* Cabeçalho próprio do CAUQ — a folha de asfalto pede outros campos que a de solo */
+  /* Cabeçalho do CAUQ — exatamente os campos que os cabeçalhos das planilhas
+     pedem: o do Marshall (ME-447/2024) e o da sondagem rotativa (ME-117).
+     Nada além disso: o que o cálculo já sabe não se redigita aqui. O teor, o
+     Rice e a faixa de projeto moram em `estado.cauq.dosagem`, e a folha os lê
+     de lá — pedir de novo era convite a divergir de si mesmo. */
   medicaoCauq: {
+    obra: '',
     cliente: '',
-    rodovia: '',
     trecho: '',
-    intervencao: '',
-    executora: '',
-    contratoExecucao: '',
-    supervisora: '',
-    contratoSupervisao: '',
+    subTrecho: '',
+    servico: '',
+    material: '',
+    usina: '',
+    estacaInicial: '',
+    estacaFinal: '',
+    lado: '',
+    cota: '',
+    numeroMedicao: '',
+    registro: '',
+    dataEnsaio: new Date().toISOString().slice(0, 10),
     laboratorista: '',
     engenheiro: '',
-    numeroMedicao: '',
-    dataEnsaio: new Date().toISOString().slice(0, 10),
-    material: '',
-    /* os parâmetros de projeto vêm do estudo de dosagem da obra */
-    teorProjeto: null,
-    riceProjeto: null,
-    aparenteProjeto: null,
-    fluenciaProjeto: null,
-    origemBrita1: '',
-    origemBrita0: '',
-    origemPoDePedra: '',
-    origemAreia: '',
-    origemCal: '',
-    estaca: '',
-    lado: '',
-    registro: '',
+    observacoes: '',
   },
+  /* Sondagem com sonda rotativa — a verificação da pista pronta */
+  sondagem: JSON.parse(JSON.stringify(SONDAGEM_PADRAO)),
   /* Cabeçalho próprio do concreto — o relatório de moldagem pede órgão,
      contratos e processo, e não camada nem próctor */
   medicaoConcreto: {
@@ -6100,6 +6690,13 @@ function mostrarLimitesNP() {
 function atualizar() {
   // cada família tem sua própria cadeia de cálculo
   if (estado.familia === 'cauq') {
+    // a mesma família tem dois ensaios distintos: a mistura e a pista pronta
+    if (estado.modo === 'sondagem') {
+      const s = atualizarSondagem();
+      montarFolhas({ sondagem: s });
+      ULTIMO_CALCULO = { sondagem: s };
+      return;
+    }
     const r = atualizarCauq();
     montarFolhas({ cauq: r });
     ULTIMO_CALCULO = { cauq: r };
@@ -6571,9 +7168,10 @@ const FICHAS = {
   cauq: {
     nome: 'CAUQ',
     bloco: 'medicaoCauq',
-    naoRepete: ['registro', 'estaca', 'dataEnsaio'],
-    conta: 'o cliente, os contratos, o projeto da mistura e as origens',
-    naoGuarda: 'o registro, a estaca e a data',
+    naoRepete: ['registro', 'estacaInicial', 'estacaFinal', 'cota', 'dataEnsaio',
+                'observacoes'],
+    conta: 'a obra, o cliente, o trecho, o material, a usina e a equipe',
+    naoGuarda: 'o registro, as estacas, a cota, a data e as observações',
   },
   concreto: {
     nome: 'rompimento do concreto',
@@ -7701,42 +8299,42 @@ function atualizarCabecalhoNaTela() {
    DADOS DO CAUQ — cabeçalho próprio da folha de asfalto
    ============================================================ */
 
+/**
+ * Os campos do cabeçalho do CAUQ — nem um a mais.
+ *
+ * A lista é a união literal de dois cabeçalhos de planilha: o do ensaio
+ * Marshall (OBRA, ESTACA inicial/final/lado, TRECHO, ENGENHEIRO, REGISTRO,
+ * CLIENTE, TÉCNICO, DATA) e o da sondagem rotativa (Registro, Data, Obra,
+ * Cliente, Medição, Trecho, Sub-trecho, Serviço, Estaca inicial e final, Cota,
+ * Material, Usina, Posição, Faixa, Observações). O que não está num desses dois
+ * cabeçalhos saiu daqui: contratos, empresas e origens de agregado nunca foram
+ * impressos, e teor, Rice e faixa de projeto já vivem na dosagem.
+ */
 const CAMPOS_MEDICAO_CAUQ = [
+  { g:'obraq',  k:'obra',               rot:'Obra',                    larg:2, obrig:true, dica:'Ex.: BR-000/UF' },
   { g:'obraq',  k:'cliente',            rot:'Cliente',                 larg:2, obrig:true },
-  { g:'obraq',  k:'rodovia',            rot:'Rodovia',                 larg:1, obrig:true },
-  { g:'obraq',  k:'intervencao',        rot:'Tipo de intervenção',     larg:1, obrig:true },
   { g:'obraq',  k:'trecho',             rot:'Trecho',                  larg:4, obrig:true },
+  { g:'obraq',  k:'subTrecho',          rot:'Sub-trecho',              larg:2 },
+  { g:'obraq',  k:'servico',            rot:'Serviço',                 larg:2, dica:'Ex.: Pavimentação' },
 
-  { g:'contq',  k:'executora',          rot:'Empresa de execução',     larg:2, obrig:true },
-  { g:'contq',  k:'contratoExecucao',   rot:'Contrato de execução nº', larg:2 },
-  { g:'contq',  k:'supervisora',        rot:'Empresa de supervisão',   larg:2, obrig:true },
-  { g:'contq',  k:'contratoSupervisao', rot:'Contrato de supervisão nº', larg:2 },
-  { g:'contq',  k:'laboratorista',      rot:'Laboratorista',           larg:2, obrig:true },
+  { g:'contq',  k:'laboratorista',      rot:'Técnico responsável',     larg:2, obrig:true },
   { g:'contq',  k:'engenheiro',         rot:'Engenheiro responsável',  larg:2, obrig:true },
 
-  { g:'ensq',   k:'numeroMedicao',      rot:'Medição nº',              larg:1 },
+  { g:'ensq',   k:'registro',           rot:'Registro nº',             larg:1, obrig:true },
   { g:'ensq',   k:'dataEnsaio',         rot:'Data',                    larg:1, obrig:true, tipo:'date' },
-  { g:'ensq',   k:'registro',           rot:'Registro',                larg:1, obrig:true },
+  { g:'ensq',   k:'numeroMedicao',      rot:'Medição nº',              larg:1 },
   { g:'ensq',   k:'material',           rot:'Material',                larg:1, obrig:true, dica:'Ex.: CAUQ FX-C' },
-  { g:'ensq',   k:'estaca',             rot:'Estaca',                  larg:1, dica:'Ex.: 100+00' },
-  { g:'ensq',   k:'lado',               rot:'Lado',                    larg:1, dica:'LD, LE ou EIXO' },
-
-  { g:'projq',  k:'teorProjeto',        rot:'Teor de projeto (%)',        larg:1, tipo:'number', passo:'0.01' },
-  { g:'projq',  k:'riceProjeto',        rot:'Rice de projeto',            larg:1, tipo:'number', passo:'0.001' },
-  { g:'projq',  k:'aparenteProjeto',    rot:'Aparente de projeto',        larg:1, tipo:'number', passo:'0.001' },
-  { g:'projq',  k:'fluenciaProjeto',    rot:'Fluência de projeto (mm)',   larg:1, tipo:'number', passo:'0.001' },
-
-  { g:'origq',  k:'origemBrita1',       rot:'Origem da brita 1',       larg:2 },
-  { g:'origq',  k:'origemBrita0',       rot:'Origem da brita 0',       larg:2 },
-  { g:'origq',  k:'origemPoDePedra',    rot:'Origem do pó de pedra',   larg:2 },
-  { g:'origq',  k:'origemAreia',        rot:'Origem da areia',         larg:2 },
-  { g:'origq',  k:'origemCal',          rot:'Origem da cal',           larg:2 },
+  { g:'ensq',   k:'usina',              rot:'Usina',                   larg:2 },
+  { g:'ensq',   k:'lado',               rot:'Posição / lado',          larg:1, dica:'LD, LE ou EIXO' },
+  { g:'ensq',   k:'cota',               rot:'Cota',                    larg:1 },
+  { g:'ensq',   k:'estacaInicial',      rot:'Estaca inicial',          larg:1, dica:'Ex.: 100+00' },
+  { g:'ensq',   k:'estacaFinal',        rot:'Estaca final',            larg:1, dica:'Ex.: 120+00' },
+  { g:'ensq',   k:'observacoes',        rot:'Observações',             larg:4 },
 ];
 
 function montarDadosCauq() {
   const m = estado.medicaoCauq || {};
-  const grupos = { obraq:'gpObraQ', contq:'gpContratoQ', ensq:'gpEnsaioQ',
-                   projq:'gpProjetoQ', origq:'gpOrigemQ' };
+  const grupos = { obraq:'gpObraQ', contq:'gpContratoQ', ensq:'gpEnsaioQ' };
 
   Object.entries(grupos).forEach(([g, alvo]) => {
     const el = $(alvo);
@@ -7771,9 +8369,10 @@ function montarDadosCauq() {
 
 /** Alterna entre o bloco de dados de solos e o de CAUQ dentro da aba Dados. */
 function montarSeletorDados() {
+  sincronizarAbaDados();
   const opcoes = [
     { chave:'solos',    nome:'Dados de solos',    desc:'Obra, material, equipe e cadastro de equipamentos' },
-    { chave:'cauq',     nome:'Dados de CAUQ',     desc:'Cliente, contratos, projeto da mistura e origens' },
+    { chave:'cauq',     nome:'Dados de CAUQ',     desc:'Obra, cliente, trecho, material e equipe do cabeçalho' },
     { chave:'concreto', nome:'Dados de rompimento do concreto',
       desc:'Órgão, contratos e processo do relatório de moldagem e rompimento' },
     { chave:'insumos',  nome:'Dados de insumos do concreto',
@@ -7791,33 +8390,59 @@ function montarSeletorDados() {
   ligarFicha();
 }
 
+/**
+ * Escolher o bloco de dados escolhe a família junto.
+ *
+ * Eram dois interruptores para a mesma coisa, e davam para ficar em desacordo:
+ * com a família em CAUQ e o bloco em solos, o laboratorista preenchia obra,
+ * camada e próctor e a folha de asfalto saía com o cabeçalho vazio — porque o
+ * cabeçalho impresso sempre seguiu a família, nunca o bloco aberto.
+ */
 function trocarAbaDados(chave) {
   estado.abaDados = chave;
+  if (FAMILIAS[chave] && FAMILIAS[chave].pronta && chave !== estado.familia) {
+    trocarFamilia(chave);   // já remonta o seletor, os modos e a tela
+    return;
+  }
   montarSeletorDados();
   montarFicha();
 }
 
+/** O bloco aberto tem de ser o da família em curso. */
+function sincronizarAbaDados() {
+  if (FAMILIAS[estado.familia] && estado.abaDados !== estado.familia)
+    estado.abaDados = estado.familia;
+}
+
 function aplicarAbaDados() {
+  sincronizarAbaDados();
   document.querySelectorAll('[data-bloco]').forEach(el =>
     el.classList.toggle('escondido-bloco', el.dataset.bloco !== estado.abaDados));
 }
 
-/** "120+00 · LD" — a localização do ensaio de CAUQ. */
+/** "100+00 a 120+00 · LD" — a localização do ensaio de CAUQ. */
 function localCauq() {
   const m = estado.medicaoCauq || {};
-  return [m.estaca, m.lado].filter(Boolean).join(' · ') || '—';
+  const estacas = [m.estacaInicial, m.estacaFinal].filter(Boolean).join(' a ');
+  return [estacas, m.lado].filter(Boolean).join(' · ') || '—';
 }
 
 /**
- * Cabeçalho da folha de CAUQ. Não reaproveita o de solos porque a folha de
- * asfalto pede outra coisa: cliente, contratos, material e os parâmetros de
- * projeto da mistura no lugar de camada, próctor e origem/destino do material.
+ * Cabeçalho da folha de CAUQ.
+ *
+ * Imprime exatamente os campos que os cabeçalhos das planilhas de origem
+ * pedem — o do Marshall e o da sondagem rotativa —, e nada além. A faixa
+ * granulométrica vem da dosagem, não de um campo digitado à parte: é a mesma
+ * faixa que o cálculo usa, e duas cópias do mesmo dado acabam divergindo.
  */
 function cabecalhoObraCauq(extras = []) {
   const m = estado.medicaoCauq || {};
   const cel = (k, v, span = 0) =>
     `<td class="k">${k}</td><td class="v"${span ? ` colspan="${span}"` : ''}>${
-      (v === 0 || v) ? v : '—'}</td>`;
+      (v === 0 || v) ? v : '\u2014'}</td>`;
+
+  const d = (estado.cauq || {}).dosagem || {};
+  const faixa = (CAUQ.FAIXAS[d.faixa] || {}).nome || d.faixa;
 
   const linhasExtras = [];
   for (let i = 0; i < extras.length; i += 3) {
@@ -7835,60 +8460,38 @@ function cabecalhoObraCauq(extras = []) {
         <col style="width:13%"><col style="width:20.3%">
       </colgroup>
       <tr>
+        ${cel('Obra', m.obra, 3)}
+        ${cel('Registro', m.registro)}
+      </tr>
+      <tr>
         ${cel('Cliente', m.cliente, 3)}
         ${cel('Medição', m.numeroMedicao)}
       </tr>
       <tr>
-        ${cel('Trecho', m.trecho, 3)}
-        ${cel('Rodovia', m.rodovia)}
+        ${cel('Trecho', m.trecho, 5)}
       </tr>
       <tr>
-        ${cel('Intervenção', m.intervencao, 3)}
+        ${cel('Sub-trecho', m.subTrecho, 3)}
+        ${cel('Data', dataBr(m.dataEnsaio))}
+      </tr>
+      <tr>
+        ${cel('Serviço', m.servico)}
         ${cel('Material', m.material)}
+        ${cel('Faixa', faixa)}
       </tr>
       <tr>
-        ${cel('Executora', m.executora, 2)}
-        ${cel('Contrato exec.', m.contratoExecucao, 2)}
+        ${cel('Usina', m.usina, 3)}
+        ${cel('Cota', m.cota)}
       </tr>
       <tr>
-        ${cel('Supervisora', m.supervisora, 2)}
-        ${cel('Contrato sup.', m.contratoSupervisao, 2)}
+        ${cel('Estaca', localCauq(), 5)}
       </tr>
       <tr>
-        ${cel('Estaca', localCauq())}
-        ${cel('Teor proj.', fmt(m.teorProjeto, 2) + ' %')}
-        ${cel('Rice proj.', fmt(m.riceProjeto, 3))}
-      </tr>
-      <tr>
-        ${cel('Aparente proj.', fmt(m.aparenteProjeto, 3))}
-        ${cel('Fluência proj.', fmt(m.fluenciaProjeto, 2) + ' mm')}
-        ${cel('Registro', m.registro)}
-      </tr>
-      <tr>
-        ${cel('Brita 1', m.origemBrita1, 2)}
-        ${cel('Brita 0', m.origemBrita0, 2)}
-      </tr>
-      <tr>
-        ${cel('Pó de pedra', m.origemPoDePedra, 2)}
-        ${cel('Areia', m.origemAreia, 2)}
-      </tr>
-      <tr>
-        ${cel('Cal', m.origemCal, 5)}
+        ${cel('Técnico', m.laboratorista, 2)}
+        ${cel('Engenheiro', m.engenheiro, 2)}
       </tr>
       ${linhasExtras.join('')}
     </table>`;
-}
-
-/** Bloco de origens dos materiais, ao pé da folha de CAUQ. */
-function origensCauq() {
-  const m = estado.medicaoCauq;
-  return [
-    ['Brita 1', m.origemBrita1 || '—'],
-    ['Brita 0', m.origemBrita0 || '—'],
-    ['Pó de pedra', m.origemPoDePedra || '—'],
-    ['Areia', m.origemAreia || '—'],
-    ['Cal', m.origemCal || '—'],
-  ];
 }
 
 /* ============================================================
@@ -8205,7 +8808,7 @@ const FAMILIAS = {
 /** Modos que pertencem a cada família. */
 const MODOS_DA_FAMILIA = {
   solos:    ['simples', 'caracterizacao', 'completo'],
-  cauq:     ['marshall'],
+  cauq:     ['marshall', 'sondagem'],
   concreto: ['concreto'],
   insumos:  ['insumos'],
 };
@@ -8318,6 +8921,21 @@ const MODOS = {
       ['Equivalente de areia da mistura',  'DNIT 450/2024'],
     ],
   },
+  sondagem: {
+    chave: 'sondagem',
+    familia: 'cauq',
+    nome: 'Concreto asfáltico — sondagem rotativa',
+    desc: 'A verificação da pista pronta: extraem-se corpos de prova da camada executada e '
+        + 'deles saem a espessura, a densidade e o grau de compactação contra o Marshall do dia.',
+    folhas: 1,
+    ensaios: [
+      ['Extração de corpos de prova',       'DNER-ME 117/94'],
+      ['Densidade aparente da camada',      'DNER-ME 117/94'],
+      ['Vazios da pista contra o Rice',     'DNIT 427/2020'],
+      ['Grau de compactação',               'DNIT 031/2024'],
+      ['Controle estatístico do lote',      'DNIT 031/2024'],
+    ],
+  },
   concreto: {
     chave: 'concreto',
     familia: 'concreto',
@@ -8352,7 +8970,8 @@ const MODOS = {
 
 /** Rótulo curto para o chip do cabeçalho. */
 const ROTULO_CURTO = { simples:'Simples', caracterizacao:'5 ensaios', completo:'Completo',
-                       marshall:'Marshall', concreto:'Concreto', insumos:'Insumos' };
+                       marshall:'Marshall', sondagem:'Sondagem',
+                       concreto:'Concreto', insumos:'Insumos' };
 
 function montarModos() {
   const daFamilia = MODOS_DA_FAMILIA[estado.familia] || Object.keys(MODOS);
@@ -10033,6 +10652,8 @@ const FOLHAS_POR_MODO = {
                    'cbr', 'insitu', 'sedimentacao', 'resumo'],
   /* CAUQ: os sete ensaios cabem numa folha só, como na planilha de origem */
   marshall:       ['cauq'],
+  /* Sondagem: o lote inteiro de furos numa folha */
+  sondagem:       ['sondagem'],
   /* Concreto: uma peça concretada, uma folha */
   concreto:       ['concreto'],
   /* Insumos: o quadro numa folha e as determinações na outra */
@@ -10783,6 +11404,7 @@ function folhaResumo(r, pagina, total) {
    ------------------------------------------------------------ */
 const CONSTRUTORES = {
   cauq:          folhaCauq,
+  sondagem:      folhaSondagem,
   concreto:      folhaConcreto,
   insumos:       folhaInsumos,
   granulometria: folhaGranulometria,
@@ -10825,8 +11447,9 @@ function montarFolhas(r) {
   // a aba Resumo mostra a folha que fecha o relatório da família em curso
   const previa = $('previaResumo');
   if (previa) {
-    const fecha = { cauq: folhaCauq, concreto: folhaConcreto,
-                    insumos: folhaInsumos }[estado.familia] || folhaResumo;
+    const fecha = estado.modo === 'sondagem' ? folhaSondagem
+      : ({ cauq: folhaCauq, concreto: folhaConcreto,
+           insumos: folhaInsumos }[estado.familia] || folhaResumo);
     const f = fecha(r, 1, 1);
     previa.innerHTML = f.length ? f[0] : '';
     desenharGraficosDaFolha(r, previa);
@@ -10944,8 +11567,8 @@ function folhaCauq(r, pagina, total) {
       ['Faixa', c.composicao.faixa.nome],
       ['TNM', num(c.composicao.faixa.tnm, 1) + ' mm'],
       ['Teor obtido', num(c.betume.teor, 2) + ' %', true],
-      ['Desvio', (c.betume.teor - estado.medicaoCauq.teorProjeto >= 0 ? '+' : '')
-        + num(c.betume.teor - estado.medicaoCauq.teorProjeto, 2) + ' pp'],
+      ['Desvio', (c.betume.teor - d.teorProjeto >= 0 ? '+' : '')
+        + num(c.betume.teor - d.teorProjeto, 2) + ' pp'],
       ['Umidade', num(c.betume.umidade, 3) + ' %'],
       ['T. usina', num(p.temperaturaUsina, 0) + ' °C'],
       ['T. rolagem', num(p.temperaturaRolagem, 0) + ' °C'],
@@ -11430,7 +12053,8 @@ function montarTudoDoZero() {
   montarCapsulas(); montarPeneiras(); montarLP(); montarLL(); montarComp(); montarCbr();
   montarFuros(); montarEA(); montarPic(); montarSed(); montarSedCap();
   montarAgendaSolos();
-  montarEquipamentos(); montarFrasco(); montarCauq(); montarConcreto(); montarInsumos();
+  montarEquipamentos(); montarFrasco(); montarCauq(); montarSondagem();
+  montarConcreto(); montarInsumos();
   montarFamilias();
   montarDados(); montarDadosCauq(); montarDadosConcreto(); montarDadosInsumos();
   montarSeletorDados();
@@ -11452,9 +12076,10 @@ function resumoDoCalculo(c) {
     // número do relatório — duas peças do mesmo relatório são ensaios distintos
     registro: concreto ? p.rg : m.registro,
     estaca:   cauq ? localCauq() : concreto ? (p.estacaAplicacao || '—') : m.furo,
-    camada:   cauq ? m.intervencao : concreto ? (p.localAplicacao || '—') : m.camada,
-    obra:     cauq ? m.cliente : concreto ? m.obra : m.obra,
-    rodovia:  m.rodovia,
+    camada:   cauq ? m.servico : concreto ? (p.localAplicacao || '—') : m.camada,
+    obra:     m.obra,
+    // o CAUQ não tem campo de rodovia: quem separa um lote do outro é o trecho
+    rodovia:  cauq ? m.trecho : m.rodovia,
     material: cauq ? m.material : concreto ? `FCK ${fmt(p.fck, 0)} MPa` : m.tipoMaterial,
     data:     concreto ? p.dataMoldagem : m.dataEnsaio,
     folhas: $('folhaImpressao').querySelectorAll('.folha').length,
@@ -11486,6 +12111,16 @@ function resumoDoCalculo(c) {
       idades:  q ? q.idades.length : null,
       ampl:    g28 ? g28.amplitude : null,
       atende:  q ? q.atende : null,
+    };
+  }
+  if (cauq && estado.modo === 'sondagem') {
+    const q = c.sondagem;
+    return { ...base,
+      furos: q ? q.corposDeProva.length : null,
+      esp:   q && q.espessura ? q.espessura.resultado : null,
+      gcRes: q && q.gc ? q.gc.resultado : null,
+      k:     q ? q.coeficienteK : null,
+      atende: q ? q.atende : null,
     };
   }
   if (cauq) {
@@ -12670,7 +13305,7 @@ function imprimirRelatorio(depois) {
 }
 // o listener recebe o evento do clique; passá-lo adiante faria `depois()`
 // tentar chamar um MouseEvent e estourar logo depois da impressão
-['btnImprimir', 'btnRelatorio', 'btnRelatorio2'].forEach(id =>
+['btnImprimir', 'btnImprimirSondagem', 'btnRelatorio', 'btnRelatorio2'].forEach(id =>
   $(id).addEventListener('click', () => imprimirRelatorio()));
 
 $('btnAddFuro').addEventListener('click', () => {
@@ -12718,6 +13353,7 @@ montarSedCap();
 montarEquipamentos();
 montarFrasco();
 montarCauq();
+montarSondagem();
 montarConcreto();
 montarInsumos();
 montarFamilias();
