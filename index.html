@@ -515,7 +515,10 @@ td select{width:100%; padding:7px 9px; font-size:15.5px;}
 
 /* prévia do cabeçalho impresso, encolhida para caber na tela */
 .previa-wrap{background:var(--jt-asfalto-100); border:1px solid var(--border); border-radius:10px;
-  padding:14px; overflow:hidden;}
+  padding:14px;
+  /* a folha é A4: num celular ela não cabe. Cortar escondia o lado direito sem
+     dizer que existia — arrastar de lado mostra a folha inteira. */
+  overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch;}
 /* vale para toda folha mostrada na tela — a do Resumo não leva a classe
    .previa e ficava sem papel embaixo, ilegível no tema escuro */
 .previa-wrap .folha{background:var(--papel); color:var(--tinta);
@@ -601,6 +604,9 @@ tr.marco td:first-child::after{content:" ●"; color:var(--accent); font-size:8p
   table.t-form, table.t-form tbody{display:block; width:100%;}
   table.t-form tr{
     display:grid; grid-template-columns:repeat(3,1fr); gap:9px 10px;
+    /* os campos alinham por baixo: rótulo de duas linhas ao lado de um de uma
+       linha deixava um campo mais alto que o vizinho */
+    align-items:end;
     border:1px solid var(--border); border-radius:var(--radius-sm);
     padding:10px 12px 12px; margin-bottom:9px;
     background:color-mix(in srgb,var(--card) 96%, var(--bg));
@@ -609,11 +615,18 @@ tr.marco td:first-child::after{content:" ●"; color:var(--accent); font-size:8p
   table.t-form td{
     border:none; padding:0; display:flex; flex-direction:column;
     align-items:stretch; gap:3px; text-align:left; min-width:0;
+    /* a tabela larga vive de nowrap; o cartão do celular, não. Numa coluna de
+       84 px, "100,0 – 100,0" e "✕ >15 % da média" saíam por fora da célula. */
+    white-space:normal;
   }
   table.t-form td::before{
     content:attr(data-rot);
     font-size:9.5px; font-weight:700; color:var(--text-mut);
     text-transform:uppercase; letter-spacing:.35px; line-height:1.2;
+    /* o td herda o white-space:nowrap das tabelas, e o rótulo herdava dele:
+       "RESÍDUO NA Nº 200 (G)" saía por cima do vizinho e o último era cortado
+       na borda da tela. Aqui ele quebra em duas linhas e fica dentro. */
+    white-space:normal; overflow-wrap:anywhere;
   }
   table.t-form td.cap{
     grid-column:1/-1; flex-direction:row; align-items:baseline; gap:7px;
@@ -622,8 +635,12 @@ tr.marco td:first-child::after{content:" ●"; color:var(--accent); font-size:8p
   }
   table.t-form td.cap::before{font-size:9.5px;}
   table.t-form td input{width:100%; min-width:0; text-align:left; font-size:15px; padding:8px 9px;}
-  table.t-form td.forte, table.t-form td.num{font-size:14px; font-weight:700;}
-  table.t-form td .badge{align-self:flex-start;}
+  /* o valor calculado é uma linha de texto ao lado de um campo de 44px; sem
+     esta folga ele encosta no fundo do cartão e parece desalinhado do vizinho */
+  table.t-form td.forte, table.t-form td.num{
+    font-size:14px; font-weight:700; padding-bottom:13px;
+  }
+  table.t-form td .badge{align-self:flex-start; white-space:normal; text-align:left;}
 
   /* peneiramento: no celular só o essencial; os intermediários ficam no desktop */
   td.det, th.det{display:none;}
