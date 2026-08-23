@@ -9043,8 +9043,14 @@ function montarModos() {
       </span>
     </button>`).join('');
 
+  /* escolher o tipo já entra no ensaio: a barra de baixo só faz sentido depois
+     de haver um ensaio escolhido, e ficar na tela de seleção depois de escolher
+     obrigava a procurar por onde começar */
   $('modos').querySelectorAll('[data-modo]').forEach(b =>
-    b.addEventListener('click', () => trocarModo(b.dataset.modo)));
+    b.addEventListener('click', () => {
+      trocarModo(b.dataset.modo);
+      irParaAba(ABA_DO_MODO[b.dataset.modo] || 'dados');
+    }));
 }
 
 function trocarModo(chave) {
@@ -9068,13 +9074,23 @@ function aplicarModo() {
   // se a aba aberta sumiu, volta para a de seleção
   const aberta = document.querySelector('section.aba.ativa');
   if (!aberta || aberta.classList.contains('escondido')) irParaAba('dados');
+  /* a barra de baixo também se acerta na abertura do app, quando ninguém
+     chamou irParaAba() ainda e a aba de dados já vem marcada no HTML */
+  else document.body.classList.toggle('sem-rodape',
+    ABAS_SEM_RODAPE.includes(aberta.id.replace('aba-', '')));
 
   $('listaEnsaios').innerHTML = m.ensaios
     .map(([nome, norma]) => `<li>${nome}<span class="norma">${norma}</span></li>`).join('');
 }
 
-/** Abas que dispensam a barra de lançamento do rodapé. */
-const ABAS_SEM_RODAPE = ['historico', 'analise', 'equipamentos'];
+/**
+ * Abas que dispensam a barra de lançamento do rodapé.
+ *
+ * Dados e Ensaio entram aqui: em nenhuma das duas se lança ensaio, e a barra
+ * cheia de ensaios de solo aparecendo antes de o tipo ser escolhido dizia que
+ * havia trabalho começado onde não havia.
+ */
+const ABAS_SEM_RODAPE = ['dados', 'ensaio', 'historico', 'analise', 'equipamentos'];
 
 function irParaAba(chave) {
   document.body.classList.toggle('sem-rodape', ABAS_SEM_RODAPE.includes(chave));
