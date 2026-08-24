@@ -1351,7 +1351,7 @@ summary:hover{color:var(--text);}
   </div>
 
   <div class="card">
-    <h2>Calendário de lançamentos <span class="tag">Toque num dia</span></h2>
+    <h2>Calendário de lançamentos <span class="tag">Toque num dia para recortar a aba</span></h2>
     <div class="calnav">
       <button type="button" id="anMesAntes" aria-label="Mês anterior">‹</button>
       <span class="mes" id="anMesLabel"></span>
@@ -7511,7 +7511,9 @@ const NOME_FAMILIA = { solos:'Solos', cauq:'CAUQ', concreto:'Concreto',
 
 let anMesRef = null;      // primeiro dia do mês exibido
 let anDiaSel = null;      // dia escolhido no calendário
-const anFiltro = { obra:'', rodovia:'', camada:'', familia:'', periodo:'tudo' };
+/* `de` e `ate` são ISO (aaaa-mm-dd); vazio quer dizer sem limite daquele lado.
+   Os dois vazios = tudo que está guardado. */
+const anFiltro = { obra:'', rodovia:'', camada:'', familia:'', de:'', ate:'' };
 
 /* ------------------------------------------------------------
    Datas
@@ -7552,20 +7554,29 @@ function passaNoRecorte(e) {
   return true;
 }
 
-/** O que entra nos números: o recorte dos filtros mais o período. */
+/**
+ * O que entra nos números: o recorte dos filtros mais o intervalo de datas.
+ *
+ * Datas ISO comparam como texto — "2026-08-03" < "2026-08-14" —, então não é
+ * preciso converter para Date só para saber quem vem antes.
+ */
 function escopoAnalise() {
-  const noMes = `${anMesRef.getFullYear()}-${String(anMesRef.getMonth() + 1).padStart(2, '0')}`;
-  const limite = new Date();
-  limite.setDate(limite.getDate() - 30);
-  const iso30 = isoDeData(limite);
-
   return historico.filter(e => {
     if (!passaNoRecorte(e)) return false;
     const d = dataDoEnsaio(e);
-    if (anFiltro.periodo === 'mes' && d.slice(0, 7) !== noMes) return false;
-    if (anFiltro.periodo === '30' && d < iso30) return false;
+    if (anFiltro.de && (!d || d < anFiltro.de)) return false;
+    if (anFiltro.ate && (!d || d > anFiltro.ate)) return false;
     return true;
   });
+}
+
+/** "de 03/08/2026 a 14/08/2026" — como o intervalo aparece escrito. */
+function textoDoIntervalo() {
+  const { de, ate } = anFiltro;
+  if (!de && !ate) return 'tudo que está guardado';
+  if (de && ate && de === ate) return `o dia ${dataBr(de)}`;
+  if (de && ate) return `de ${dataBr(de)} a ${dataBr(ate)}`;
+  return de ? `a partir de ${dataBr(de)}` : `até ${dataBr(ate)}`;
 }
 
 /** Ensaios do recorte, sem o filtro de período — é o que o calendário desenha. */
@@ -7624,6 +7635,15 @@ function montarAnalise() {
 }
 
 function montarFiltrosAnalise() {
+  /* Com um campo do recorte sob o dedo, refazer o innerHTML fecharia o seletor
+     de data no meio da escolha — é o mesmo problema do teclado que sumia nos
+     equipamentos. O resumo logo abaixo continua sendo reescrito de qualquer
+     jeito: ele é quem diz quantos ensaios sobraram, e ficar defasado seria pior
+     que perder o foco. */
+  const ativo = document.activeElement;
+  const editando = ativo && ativo.matches
+    && ativo.matches('#filtrosAnalise input, #filtrosAnalise select');
+
   const campos = [
     ['obra',    'Obra',    'Todas as obras'],
     ['rodovia', 'Rodovia', 'Todas as rodovias'],
@@ -7638,23 +7658,33 @@ function montarFiltrosAnalise() {
 
   const familias = [...new Set(historico.map(e => (e.resumo || {}).familia || 'solos'))];
 
-  $('filtrosAnalise').innerHTML =
+  const html =
     campos.map(([c, r, t]) => seletor(c, r, t, opcoesDoHistorico(c))).join('')
     + `<div><label>Família</label><select data-an="familia">
         <option value="">Todas as famílias</option>
         ${familias.map(f => `<option value="${f}"${f === anFiltro.familia ? ' selected' : ''}>`
           + `${NOME_FAMILIA[f] || f}</option>`).join('')}
       </select></div>`
-    + `<div style="grid-column:span 2"><label>Período</label><select data-an="periodo">
-        ${[['tudo','Tudo que está guardado'], ['mes','Só o mês do calendário'],
-           ['30','Últimos 30 dias']].map(([v, r]) =>
-          `<option value="${v}"${v === anFiltro.periodo ? ' selected' : ''}>${r}</option>`).join('')}
-      </select></div>`;
+    + `<div><label>De</label>
+        <input type="date" data-an="de" value="${atr(anFiltro.de)}"></div>`
+    + `<div><label>Até</label>
+        <input type="date" data-an="ate" value="${atr(anFiltro.ate)}"></div>`
+    + `<div style="grid-column:span 2; align-self:end">
+        <button type="button" class="btn ghost sm" id="anLimparPeriodo"
+          ${anFiltro.de || anFiltro.ate ? '' : 'disabled'}>Limpar as datas</button></div>`;
+
+  if (!editando) $('filtrosAnalise').innerHTML = html;
 
   const escopo = escopoAnalise();
-  $('anResumoFiltro').textContent = historico.length
-    ? `${escopo.length} de ${historico.length} ensaio(s) guardado(s) entram neste recorte.`
-    : 'Nenhum ensaio guardado ainda. Assim que você salvar o primeiro, ele aparece aqui.';
+  const invertido = anFiltro.de && anFiltro.ate && anFiltro.de > anFiltro.ate;
+  $('anResumoFiltro').innerHTML = !historico.length
+    ? 'Nenhum ensaio guardado ainda. Assim que você salvar o primeiro, ele aparece aqui.'
+    : invertido
+      ? '<b>A data inicial está depois da final</b> — por isso não sobrou ensaio nenhum. '
+        + 'Troque uma das duas.'
+      : `${escopo.length} de ${historico.length} ensaio(s) guardado(s) entram neste recorte, `
+        + `considerando <b>${textoDoIntervalo()}</b>. Tocar num dia do calendário traz `
+        + 'esse dia para as datas acima.';
 }
 
 function montarKpis(escopo) {
@@ -7892,8 +7922,22 @@ function ligarAnalise() {
   });
 
   aba.addEventListener('click', e => {
+    /* tocar num dia recorta a aba inteira naquele dia: os números de cima, o
+       semáforo e a tabela de médias passam a falar do mesmo dia que a lista de
+       baixo. Antes só a lista mudava, e os números continuavam do mês todo. */
     const dia = e.target.closest('[data-dia]');
-    if (dia) { anDiaSel = dia.dataset.dia; montarCalendario(); return; }
+    if (dia) {
+      anDiaSel = dia.dataset.dia;
+      anFiltro.de = anFiltro.ate = anDiaSel;
+      montarAnalise();
+      return;
+    }
+
+    if (e.target.closest('#anLimparPeriodo')) {
+      anFiltro.de = anFiltro.ate = '';
+      montarAnalise();
+      return;
+    }
 
     const b = e.target.closest('[data-editar],[data-pdf]');
     if (!b) return;
@@ -7907,9 +7951,10 @@ function ligarAnalise() {
 
 function mudarMesAnalise(passo) {
   anMesRef = new Date(anMesRef.getFullYear(), anMesRef.getMonth() + passo, 1);
-  // com o período preso ao mês do calendário, virar o mês muda todos os números
-  if (anFiltro.periodo === 'mes') montarAnalise();
-  else montarCalendario();
+  /* virar o mês é folhear, não filtrar: o intervalo escolhido continua valendo,
+     e o calendário segue mostrando o movimento do mês inteiro para haver o que
+     escolher */
+  montarCalendario();
   $('anMesLabel').scrollIntoView({ block: 'nearest' });
 }
 
