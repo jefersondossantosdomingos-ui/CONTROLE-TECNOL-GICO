@@ -100,7 +100,7 @@ Cada cliente recebe o seu arquivo. Para gerar o de outro laboratório, crie
 `marca/<cliente>/` com o `marca.json` e os arquivos de logo, e rode
 `bash build.sh <cliente>`. O código do app não muda — só a pasta da marca.
 
-**Nesta versão:** Jotta Engenharia. Grafite `#1B2127` e amarelo de sinalização
+**Nesta versão:** Jotta Engenharia. As cores vêm de `marca/<cliente>/paleta.json`
 `#FFC400`, tipografia Barlow Semi Condensed nos títulos e Inter nos dados, as
 duas embutidas para o app abrir sem sinal. O amarelo é sempre ação (botão, aba
 corrente), nunca situação de ensaio — quem diz se passou ou não é o verde, o
