@@ -668,12 +668,37 @@ tr.marco td:first-child::after{content:" ●"; color:var(--accent); font-size:8p
   td input{width:82px; min-width:76px;}
 }
 
+/* --- cadastro de equipamentos: um grupo por vez --- */
+/* São 72 cilindros e 144 cápsulas. Tudo aberto ao mesmo tempo eram centenas de
+   fichas para rolar até chegar no frasco. Cada grupo abre e fecha; fechados,
+   a aba inteira cabe numa tela. */
+.grupo-equip{border:1px solid var(--border); border-radius:var(--radius-sm);
+  margin-bottom:9px; background:color-mix(in srgb,var(--card) 97%, var(--bg));}
+.grupo-equip:last-of-type{margin-bottom:0;}
+.cab-grupo{
+  width:100%; display:flex; align-items:center; gap:10px; text-align:left;
+  background:none; border:none; cursor:pointer; font-family:inherit;
+  padding:13px 14px; min-height:var(--mk-altura-campo); color:var(--text);
+  font-size:14.5px; font-weight:800; letter-spacing:.2px; border-radius:var(--radius-sm);
+}
+.cab-grupo:hover{background:var(--mk-superficie-2);}
+.cab-grupo .nome{flex:1; min-width:0;}
+.cab-grupo .conta{font-size:11.5px; font-weight:700; color:var(--text-mut);
+  text-transform:uppercase; letter-spacing:.3px; white-space:nowrap;}
+.cab-grupo .seta{display:inline-block; width:12px; flex:0 0 auto; color:var(--accent);
+  font-size:17px; line-height:1; transition:transform .16s;}
+.grupo-equip.aberto > .cab-grupo .seta{transform:rotate(90deg);}
+.grupo-equip > .corpo-grupo{display:none; padding:0 14px 14px;}
+.grupo-equip.aberto > .corpo-grupo{display:block;}
+
 /* --- busca dentro do cadastro de equipamentos --- */
 .busca-equip{display:flex; align-items:center; gap:10px; margin:0 0 10px; flex-wrap:wrap;}
 .busca-equip input{flex:1 1 200px; min-width:0;}
-.busca-equip .conta{font-size:12px; color:var(--text-mut); font-weight:700;
-  text-transform:uppercase; letter-spacing:.3px; white-space:nowrap;}
-tr.fora-da-busca{display:none;}
+/* No celular a linha vira cartão com `table.t-form tr{display:grid}`, que é mais
+   específico que `tr.fora-da-busca` e vencia: a busca marcava a linha e ela
+   continuava na tela. A suíte não pegava porque conferia a classe, não o que
+   aparece. Daí a especificidade casada aqui. */
+tr.fora-da-busca, table.t-form tr.fora-da-busca{display:none;}
 
 /* ================= BLOCOS DE RESULTADO ================= */
 .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px;}
@@ -1325,71 +1350,91 @@ summary:hover{color:var(--text);}
       digitada em cada ensaio.
     </p>
 
-    <h3 class="sub-cad">Cilindros de compactação</h3>
-    <div class="busca-equip">
-      <input type="search" id="busca-cilindros" data-eqbusca="cilindros"
-             placeholder="Procurar cilindro pelo nº" autocomplete="off">
-      <span class="conta" id="conta-cilindros"></span>
+    <div class="grupo-equip" data-grupo="cilindros">
+      <button type="button" class="cab-grupo" data-eqabre="cilindros">
+        <span class="seta" aria-hidden="true">›</span>
+        <span class="nome">Cilindros de compactação</span>
+        <span class="conta" id="conta-cilindros"></span>
+      </button>
+      <div class="corpo-grupo">
+        <div class="busca-equip">
+          <input type="search" id="busca-cilindros" data-eqbusca="cilindros"
+                 placeholder="Procurar cilindro pelo nº" autocomplete="off">
+        </div>
+        <div class="tabwrap">
+          <table class="t-form">
+            <thead><tr><th>Nº</th><th>Peso (g)</th><th>Diâmetro (mm)</th><th>Altura (mm)</th><th>Volume (cm³)</th><th></th></tr></thead>
+            <tbody id="tbCilindros"></tbody>
+          </table>
+        </div>
+        <button class="btn ghost sm" type="button" data-eqadd="cilindros">+ Cilindro</button>
+      </div>
     </div>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Peso (g)</th><th>Diâmetro (mm)</th><th>Altura (mm)</th>
-          <th>Volume (cm³)</th><th></th></tr></thead>
-        <tbody id="tbCilindros"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="cilindros">+ Cilindro</button>
 
-    <h3 class="sub-cad">Cápsulas de compactação</h3>
-    <p class="hint" style="margin:0 0 10px">
-      São as que os ensaios de <b>umidade</b> usam: higroscópica, umidade de campo do
-      in situ e a da sedimentação. Não se misturam com as de limites.
-    </p>
-    <div class="busca-equip">
-      <input type="search" id="busca-capsulas" data-eqbusca="capsulas"
-             placeholder="Procurar cápsula pelo nº" autocomplete="off">
-      <span class="conta" id="conta-capsulas"></span>
+    <div class="grupo-equip" data-grupo="capsulas">
+      <button type="button" class="cab-grupo" data-eqabre="capsulas">
+        <span class="seta" aria-hidden="true">›</span>
+        <span class="nome">Cápsulas de compactação</span>
+        <span class="conta" id="conta-capsulas"></span>
+      </button>
+      <div class="corpo-grupo">
+    <p class="hint" style="margin:0 0 10px">São as que os ensaios de <b>umidade</b> usam: higroscópica, umidade de campo do in situ e a da sedimentação. Não se misturam com as de limites.</p>
+        <div class="busca-equip">
+          <input type="search" id="busca-capsulas" data-eqbusca="capsulas"
+                 placeholder="Procurar cápsula pelo nº" autocomplete="off">
+        </div>
+        <div class="tabwrap">
+          <table class="t-form">
+            <thead><tr><th>Nº</th><th>Tara (g)</th><th></th></tr></thead>
+            <tbody id="tbCapsCad"></tbody>
+          </table>
+        </div>
+        <button class="btn ghost sm" type="button" data-eqadd="capsulas">+ Cápsula de compactação</button>
+      </div>
     </div>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Tara (g)</th><th></th></tr></thead>
-        <tbody id="tbCapsCad"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="capsulas">+ Cápsula de compactação</button>
 
-    <h3 class="sub-cad">Cápsulas de limites (LL e LP)</h3>
-    <p class="hint" style="margin:0 0 10px">
-      Jogo próprio, com a mesma numeração das de compactação e outras taras. É por isso
-      que ficam separadas: a tara do jogo errado erra a umidade e, com ela, o limite.
-    </p>
-    <div class="busca-equip">
-      <input type="search" id="busca-capsulasLimites" data-eqbusca="capsulasLimites"
-             placeholder="Procurar cápsula pelo nº" autocomplete="off">
-      <span class="conta" id="conta-capsulasLimites"></span>
+    <div class="grupo-equip" data-grupo="capsulasLimites">
+      <button type="button" class="cab-grupo" data-eqabre="capsulasLimites">
+        <span class="seta" aria-hidden="true">›</span>
+        <span class="nome">Cápsulas de limites (LL e LP)</span>
+        <span class="conta" id="conta-capsulasLimites"></span>
+      </button>
+      <div class="corpo-grupo">
+    <p class="hint" style="margin:0 0 10px">Jogo próprio, com a mesma numeração das de compactação e outras taras. É por isso que ficam separadas: a tara do jogo errado erra a umidade e, com ela, o limite.</p>
+        <div class="busca-equip">
+          <input type="search" id="busca-capsulasLimites" data-eqbusca="capsulasLimites"
+                 placeholder="Procurar cápsula pelo nº" autocomplete="off">
+        </div>
+        <div class="tabwrap">
+          <table class="t-form">
+            <thead><tr><th>Nº</th><th>Tara (g)</th><th></th></tr></thead>
+            <tbody id="tbCapsLim"></tbody>
+          </table>
+        </div>
+        <button class="btn ghost sm" type="button" data-eqadd="capsulasLimites">+ Cápsula de limites</button>
+      </div>
     </div>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Tara (g)</th><th></th></tr></thead>
-        <tbody id="tbCapsLim"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="capsulasLimites">+ Cápsula de limites</button>
 
-    <h3 class="sub-cad">Frascos de areia</h3>
-    <div class="busca-equip">
-      <input type="search" id="busca-frascos" data-eqbusca="frascos"
-             placeholder="Procurar frasco pelo nº" autocomplete="off">
-      <span class="conta" id="conta-frascos"></span>
+    <div class="grupo-equip" data-grupo="frascos">
+      <button type="button" class="cab-grupo" data-eqabre="frascos">
+        <span class="seta" aria-hidden="true">›</span>
+        <span class="nome">Frascos de areia</span>
+        <span class="conta" id="conta-frascos"></span>
+      </button>
+      <div class="corpo-grupo">
+        <div class="busca-equip">
+          <input type="search" id="busca-frascos" data-eqbusca="frascos"
+                 placeholder="Procurar frasco pelo nº" autocomplete="off">
+        </div>
+        <div class="tabwrap">
+          <table class="t-form">
+            <thead><tr><th>Nº</th><th>Dens. da areia (kg/m³)</th><th>Areia no cone (g)</th><th></th></tr></thead>
+            <tbody id="tbFrascos"></tbody>
+          </table>
+        </div>
+        <button class="btn ghost sm" type="button" data-eqadd="frascos">+ Frasco</button>
+      </div>
     </div>
-    <div class="tabwrap">
-      <table class="t-form">
-        <thead><tr><th>Nº</th><th>Dens. da areia (kg/m³)</th><th>Areia no cone (g)</th><th></th></tr></thead>
-        <tbody id="tbFrascos"></tbody>
-      </table>
-    </div>
-    <button class="btn ghost sm" type="button" data-eqadd="frascos">+ Frasco</button>
-  </div>
 
   <div id="cardFichaEquip"></div>
 </section>
@@ -4232,9 +4277,10 @@ const TABELAS_EQUIP = {
   },
 };
 
-/* O que está escrito em cada campo de busca. Fica fora do estado do ensaio:
-   é jeito de olhar a tela, não dado de laudo. */
+/* O que está escrito em cada campo de busca e quais grupos estão abertos. Ficam
+   fora do estado do ensaio: são jeito de olhar a tela, não dado de laudo. */
 const buscaEquip = {};
+const gruposAbertos = new Set();
 
 function montarEquipamentos() {
   Object.values(TABELAS_EQUIP).forEach(t => {
@@ -4250,6 +4296,43 @@ function montarEquipamentos() {
   Object.keys(TABELAS_EQUIP).forEach(aplicarBuscaEquip);
   ligarCadastro();
   ligarBuscaEquip();
+  ligarGruposEquip();
+  aplicarGruposEquip();
+}
+
+/**
+ * Abre e fecha cada grupo do cadastro.
+ *
+ * Com 72 cilindros e 144 cápsulas, a aba inteira aberta eram centenas de fichas
+ * para rolar até chegar no frasco. Fechados, os quatro grupos cabem numa tela e
+ * a contagem de cada um continua à vista — dá para saber o que tem lá dentro
+ * sem abrir.
+ */
+function aplicarGruposEquip() {
+  document.querySelectorAll('[data-grupo]').forEach(g => {
+    const aberto = gruposAbertos.has(g.dataset.grupo);
+    g.classList.toggle('aberto', aberto);
+    const b = g.querySelector('.cab-grupo');
+    if (b) b.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+  });
+}
+
+function ligarGruposEquip() {
+  document.querySelectorAll('[data-eqabre]').forEach(b => {
+    if (b.dataset.ligado) return;
+    b.dataset.ligado = '1';
+    b.addEventListener('click', () => {
+      const chave = b.dataset.eqabre;
+      if (gruposAbertos.has(chave)) gruposAbertos.delete(chave);
+      else gruposAbertos.add(chave);
+      aplicarGruposEquip();
+      // recém-aberto: o campo de busca é o primeiro passo de quem tem 72 fichas
+      if (gruposAbertos.has(chave)) {
+        const busca = $('busca-' + chave);
+        if (busca) busca.focus({ preventScroll: true });
+      }
+    });
+  });
 }
 
 /**
