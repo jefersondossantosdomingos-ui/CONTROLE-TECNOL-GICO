@@ -758,6 +758,11 @@ svg text{font-family:inherit;}
 .nav-baixo{
   position:fixed; left:0; right:0; bottom:0; z-index:60;
   display:flex; gap:2px;
+  /* Com nove ensaios não cabe tudo num celular estreito. Rola de lado em vez de
+     cortar a última aba — sem isto ela existia e não havia como chegar nela,
+     que é o pior dos dois mundos. */
+  overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;
   background:color-mix(in srgb, var(--card) 97%, transparent);
   backdrop-filter:blur(16px) saturate(1.4);
   border-top:1px solid var(--border);
@@ -771,9 +776,21 @@ svg text{font-family:inherit;}
   display:flex; flex-direction:column; align-items:center; gap:3px;
   transition:background .16s, color .16s;
 }
+.nav-baixo::-webkit-scrollbar{display:none;}
+/* não encolhem abaixo do que o rótulo pede: encolher só espremeria a letra */
+.nav-baixo button{flex:1 0 auto; scroll-snap-align:center;}
 .nav-baixo button svg{width:24px; height:24px; stroke:currentColor; fill:none;
   stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
 .nav-baixo button.ativo{color:var(--accent); background:var(--accent-2);}
+
+/* Nove abas num celular: a letra aperta para caberem sem rolagem nos aparelhos
+   comuns. Onde não couber, a barra rola — e a aba escolhida se traz para a vista
+   sozinha, em irParaAba(). */
+@media (max-width:640px){
+  .nav-baixo{gap:0; padding-left:2px; padding-right:2px;}
+  .nav-baixo button{font-size:10.5px; letter-spacing:0; padding:7px 1px 5px; gap:2px;}
+  .nav-baixo button svg{width:22px; height:22px;}
+}
 
 /* Abas de preparação (Dados · Ensaio · Histórico) no cabeçalho, para o rodapé
    do celular não ficar com onze botões. */
@@ -1183,15 +1200,6 @@ summary:hover{color:var(--text);}
     <div class="grid4" id="gpEquipe"></div>
   </div>
 
-  <div class="card" data-bloco="solos">
-    <h2>Identificação do ensaio <span class="tag">Muda a cada ensaio</span></h2>
-    <div class="grid4" id="gpIdent"></div>
-    <p class="hint">
-      As estacas inicial e final delimitam o trecho verificado; a estaca de coleta é de onde
-      saiu a amostra. Registro e estaca de coleta também aparecem nas etiquetas do topo do aplicativo.
-    </p>
-  </div>
-
 
   <div class="card" data-bloco="cauq">
     <h2>Obra e equipe <span class="tag">Cabeçalho da folha de CAUQ</span></h2>
@@ -1559,6 +1567,24 @@ summary:hover{color:var(--text);}
     <p class="hint">
       O histórico fica gravado neste computador, no próprio navegador. O backup em arquivo serve
       para levar os ensaios para outra máquina ou guardar junto do projeto.
+    </p>
+  </div>
+</section>
+
+<!-- ============ SOLOS · IDENTIFICAÇÃO DO ENSAIO ============ -->
+<section class="aba" id="aba-identificacao" data-fam="solos" data-modos="simples caracterizacao completo">
+  <div class="card">
+    <h2>Identificação do ensaio <span class="tag">Muda a cada ensaio</span></h2>
+    <p class="hint" style="margin:0 0 14px">
+      É o que muda de um ensaio para o outro. Fica aqui, na hora de lançar, e não
+      junto dos dados da obra — aqueles você preenche uma vez e valem para a medição
+      inteira.
+    </p>
+    <div class="grid4" id="gpIdent"></div>
+    <p class="hint">
+      As estacas inicial e final delimitam o trecho verificado; a estaca de coleta é de
+      onde saiu a amostra. O registro é o número que identifica este ensaio no relatório
+      e no histórico.
     </p>
   </div>
 </section>
@@ -2777,9 +2803,13 @@ summary:hover{color:var(--text);}
 <div id="folhaImpressao"></div>
 
 <nav class="nav-baixo">
-      <button type="button" data-aba="amostra" data-fam="solos" data-modos="simples caracterizacao completo">
+      <button type="button" data-aba="identificacao" data-fam="solos" data-modos="simples caracterizacao completo">
+    <svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h10"/><circle cx="18" cy="17" r="2.5"/></svg>
+    Identif.
+  </button>
+  <button type="button" data-aba="amostra" data-fam="solos" data-modos="simples caracterizacao completo">
     <svg viewBox="0 0 24 24"><path d="M6 2v6l-4 8a3 3 0 0 0 3 4h14a3 3 0 0 0 3-4l-4-8V2"/><path d="M6 2h12"/><path d="M4.5 15h15"/></svg>
-    Higroscópica
+    Higrosc.
   </button>
   <button type="button" data-aba="compactacao" data-fam="solos" data-modos="simples caracterizacao completo">
     <svg viewBox="0 0 24 24"><path d="M12 3v7"/><path d="M8 6l4-3 4 3"/><rect x="4" y="12" width="16" height="9" rx="2"/><path d="M4 16h16"/></svg>
@@ -9238,9 +9268,9 @@ const MODOS = {
  * baixo, com o ensaio já carregado e nenhuma pista de onde ele estava.
  */
 const ABA_DO_MODO = {
-  simples:        'amostra',
-  caracterizacao: 'amostra',
-  completo:       'amostra',
+  simples:        'identificacao',
+  caracterizacao: 'identificacao',
+  completo:       'identificacao',
   marshall:       'cqbetume',
   sondagem:       'sondagem',
   concreto:       'cbpeca',
@@ -9315,9 +9345,9 @@ const ABAS_SEM_RODAPE = ['dados', 'ensaio', 'historico', 'analise', 'equipamento
 
 function irParaAba(chave) {
   document.body.classList.toggle('sem-rodape', ABAS_SEM_RODAPE.includes(chave));
-  // a barra de cima rola: a aba escolhida tem de vir para a vista sozinha
-  const bt = document.querySelector(`.nav-topo [data-aba="${chave}"]`);
-  if (bt) bt.scrollIntoView({ inline: 'center', block: 'nearest' });
+  // as duas barras rolam de lado: a aba escolhida tem de vir para a vista sozinha
+  document.querySelectorAll(`.nav-topo [data-aba="${chave}"], .nav-baixo [data-aba="${chave}"]`)
+    .forEach(bt => bt.scrollIntoView({ inline: 'center', block: 'nearest' }));
   // a análise lê o histórico: refaz ao entrar, senão mostra o de antes do último salvamento
   if (chave === 'analise' && typeof montarAnalise === 'function') montarAnalise();
   document.querySelectorAll('nav button[data-aba]').forEach(b =>
