@@ -4,8 +4,9 @@
    mudança dela que faz o navegador perceber que há atualização.
    ============================================================ */
 
-const VERSAO = '2026-08-31.a332868a';
-const CACHE = 'controle-tecnologico-' + VERSAO;
+const VERSAO = '2026-10-11.07991480';
+const PREFIXO = 'controle-tecnologico-';
+const CACHE = PREFIXO + VERSAO;
 
 /* O que precisa estar guardado para o app abrir sem internet. */
 const ARQUIVOS = [
@@ -32,7 +33,7 @@ self.addEventListener('activate', evento => {
   evento.waitUntil((async () => {
     const nomes = await caches.keys();
     await Promise.all(nomes
-      .filter(n => n.startsWith('controle-tecnologico-') && n !== CACHE)
+      .filter(n => n.startsWith(PREFIXO) && n !== CACHE)
       .map(n => caches.delete(n)));
     await self.clients.claim();
   })());
@@ -54,6 +55,21 @@ self.addEventListener('fetch', evento => {
 
   // a conversa com a planilha do Drive nunca passa pelo cache
   if (pedido.method !== 'GET') return;
+
+  /* o gerador de PDF do envio pelo WhatsApp (cdnjs) fica guardado à parte, num
+     cache que não é apagado a cada versão: baixado uma vez, gera PDF sem sinal */
+  if (new URL(pedido.url).hostname === 'cdnjs.cloudflare.com') {
+    evento.respondWith((async () => {
+      const libs = await caches.open(PREFIXO.replace(/-$/, '') + '.libs');
+      const guardado = await libs.match(pedido.url);
+      if (guardado) return guardado;
+      const resposta = await fetch(pedido);
+      if (resposta && (resposta.ok || resposta.type === 'opaque')) libs.put(pedido.url, resposta.clone());
+      return resposta;
+    })());
+    return;
+  }
+
   if (new URL(pedido.url).origin !== self.location.origin) return;
 
   evento.respondWith((async () => {
