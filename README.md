@@ -1,7 +1,7 @@
 # Controle Tecnológico — Jotta Engenharia
 
 App de ensaios de laboratório: solos, CAUQ, concreto e caracterização de insumos.
-Roda no navegador, funciona sem sinal e sincroniza com uma planilha do Google Drive.
+Roda no navegador, funciona sem sinal e grava tudo num banco de dados (Supabase), com login da equipe.
 
 Esta pasta é o que vai para o GitHub Pages. O laboratorista instala pelo link,
 e a atualização chega sozinha.
@@ -14,8 +14,8 @@ e a atualização chega sozinha.
 
 No GitHub, `New repository`. Nome sugerido: `controle-tecnologico`.
 Pode ser **público** — não há senha nem dado de cliente dentro do app.
-O endereço da sua planilha do Drive é digitado por cada aparelho e fica
-guardado só no celular, nunca no código.
+No código só vai a chave pública do banco; quem lê e grava os ensaios é quem
+entra com login, e cada empresa só vê os seus.
 
 **2. Mande esta pasta para lá**
 
@@ -57,7 +57,7 @@ sem barra de endereço.
 **Adicionar à Tela de Início**.
 
 Depois de instalado funciona sem internet. A internet só é necessária para
-sincronizar com a planilha.
+sincronizar com o banco de dados.
 
 ---
 
@@ -108,26 +108,23 @@ corrente), nunca situação de ensaio — quem diz se passou ou não é o verde,
 
 ---
 
-## Sincronização com o Drive
+## Banco de dados
 
-Dentro do app, aba **Histórico → Sincronização com o Drive**, com o passo a
-passo e o script para colar no Apps Script da sua planilha.
-
-Cada aparelho guarda o endereço da planilha localmente. Instale em quantos
-celulares quiser e aponte todos para a mesma planilha: o que um lança aparece
-nos outros.
+Na primeira vez, o app pede o login: **Laboratorista** ou **Gestor**, o seu nome
+e a senha do grupo. O que um aparelho lança chega aos outros em segundos.
+Sem sinal, o lançamento fica guardado no celular e sobe quando a internet voltar.
 
 ---
 
 ## Perguntas que costumam aparecer
 
 **Preciso pagar alguma coisa?**
-Não. GitHub Pages é gratuito para repositório público, e a planilha é sua.
+Não. GitHub Pages é gratuito para repositório público.
 
 **O repositório público expõe os ensaios?**
 Não. O que fica no GitHub é o programa e a identidade visual do laboratório —
-nada de obra, pessoa ou resultado. Os ensaios ficam no celular e na sua planilha
-do Drive, que continua privada.
+nada de obra, pessoa ou resultado. Os ensaios ficam no celular e no banco de
+dados, que só abre com login.
 
 **E se eu quiser um APK depois?**
 Dá para acrescentar sem refazer nada: o mesmo repositório pode ganhar uma
