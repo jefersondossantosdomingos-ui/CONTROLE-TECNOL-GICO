@@ -1,8 +1,8 @@
 {
   "name": "JOTTA — Controle Tecnológico",
   "short_name": "JOTTA Controle",
-  "description": "Ensaios de solos, CAUQ, concreto e caracterização de insumos, com relatório em PDF e sincronização com a planilha do Drive.",
-  "id": ".",
+  "description": "Ensaios de solos, CAUQ, concreto e caracterização de insumos, com relatório em PDF e banco de dados da equipe.",
+  "id": "./app-jotta",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
