@@ -2758,12 +2758,9 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
   <div class="card">
     <h2>O que este tipo inclui <span class="tag" id="modoFolhas">—</span></h2>
     <ol class="lista-ensaios" id="listaEnsaios"></ol>
-    <div style="display:flex; gap:9px; flex-wrap:wrap; margin-top:14px">
-      <button class="btn" id="btnRelatorio" type="button">Gerar relatório em PDF</button>
-    </div>
     <p class="hint">
-      Sai o relatório inteiro do tipo escolhido, na ordem da lista acima, com o cabeçalho da medição
-      em todas as folhas. O in situ ocupa quantas folhas forem precisas, 10 furos em cada.
+      O PDF de cada parte sai na aba dela; o relatório inteiro, na ordem da lista acima, sai só na
+      aba <b>Resumo</b>.
     </p>
   </div>
 
@@ -2993,6 +2990,7 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
       <div class="tt" id="tt"></div>
     </div>
   </div>
+  <div data-pdfslot="peneiras"></div>
 </section>
 
 <!-- ============ ABA 3 · LIMITES ============ -->
@@ -3048,6 +3046,7 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
       <div class="tt" id="ttLL"></div>
     </div>
   </div>
+  <div data-pdfslot="limites"></div>
 </section>
 
 
@@ -3100,6 +3099,7 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
       </p>
     </details>
   </div>
+  <div data-pdfslot="compactacao"></div>
 </section>
 
 
@@ -3191,6 +3191,7 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
       </table>
     </div>
   </div>
+  <div data-pdfslot="cbr"></div>
 </section>
 
 
@@ -3256,7 +3257,7 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
     </div>
     <div id="isAvisos"></div>
     <div style="display:flex; gap:9px; flex-wrap:wrap; margin-top:14px">
-      <button class="btn" id="btnImprimir" type="button">Gerar relatório em PDF</button>
+      <button class="btn" id="btnImprimir" type="button">Gerar PDF desta aba</button>
       <button class="btn ghost" id="btnAddFuro" type="button">+ Furo</button>
       <button class="btn ghost" id="btnDelFuro" type="button">− Furo</button>
     </div>
@@ -3386,6 +3387,7 @@ const MARCA = {"empresa": "JOTTA ENGENHARIA", "descritor": "Engenharia · Contro
       </p>
     </details>
   </div>
+  <div data-pdfslot="sedimentacao"></div>
 </section>
 
 <!-- ============ ABA 8 · RESULTADO ============ -->
@@ -13110,7 +13112,10 @@ const FOLHAS_DA_ABA_CS = {
   m31granul: ['m031Teor'], m31rice: ['m031Marshall'], m31marshall: ['m031Marshall'], m31rtd: ['m031Marshall'],
   m31dens: ['m031Dens'], m31agran: ['m031Agr'],
   // ensaio de solos de laboratório: folha 1 (granulometria, massa específica, limites) e folha 2 (compactação e ISC)
-  slident: null, slbol: ['slabBol'], slgranul: ['slab1'], slsed: ['slab1'], sllim: ['slab1'], slcomp: ['slab2'], slcbr: ['slab2'],
+  slident: null, slbol: ['slabBol'],
+  // solos (compactação simples, 5 ensaios e completo): cada aba, a folha dela
+  compactacao: ['compactacao'], peneiras: ['granulometria', 'equivalente'], limites: ['limites'], cbr: ['cbr'],
+  insitu: ['insitu'], sedimentacao: ['sedimentacao'], sondagem: ['sondagem'], slgranul: ['slab1'], slsed: ['slab1'], sllim: ['slab1'], slcomp: ['slab2'], slcbr: ['slab2'],
 };
 const NOME_PDF_ABA_CS = { csident: 'o laudo completo (todas as folhas)', csproctor: 'a folha de compactação',
   csisc: 'as folhas do ISC', cslimites: 'a folha de caracterização (limites, HRB e SUCS)',
@@ -13122,16 +13127,24 @@ const NOME_PDF_ABA_CS = { csident: 'o laudo completo (todas as folhas)', csproct
   m31agran: 'a folha da granulometria dos agregados',
   slident: 'o laudo completo (boletim de sondagem e as 2 folhas)', slbol: 'o boletim de sondagem à trado (NBR 9603)', slgranul: 'a folha 1 (granulometria, sedimentação, massa específica e limites)',
   slsed: 'a folha 1 (granulometria, sedimentação, massa específica e limites)', sllim: 'a folha 1 (granulometria, sedimentação, massa específica e limites)',
-  slcomp: 'a folha 2 (compactação e ISC)', slcbr: 'a folha 2 (compactação e ISC)' };
+  slcomp: 'a folha 2 (compactação e ISC)', slcbr: 'a folha 2 (compactação e ISC)',
+  compactacao: 'a folha do ensaio de compactação', peneiras: 'a folha da granulometria (e a do equivalente de areia, no completo)',
+  limites: 'a folha dos limites e da classificação', cbr: 'a folha do ISC e da expansão', insitu: 'a folha do in situ',
+  sedimentacao: 'a folha da sedimentação', sondagem: 'a folha da sondagem rotativa' };
 const ABAS_COM_SALVAR = ['m31granul', 'm31rice', 'm31marshall', 'm31rtd', 'm31dens', 'm31agran',
   'slident', 'slbol', 'slgranul', 'slsed', 'sllim', 'slcomp', 'slcbr'];
-const ABAS_LAUDO_INTEIRO = ['csident', 'slident'];
-const ABAS_SO_SALVAR = ['slident'];
+const ABAS_LAUDO_INTEIRO = [];
+/* As abas de identificação não têm folha própria: só salvam. O PDF de todas as folhas sai só na aba Resumo. */
+const ABAS_SO_SALVAR = ['slident', 'csident'];
 
 function voltarRelatorioInteiro() { if (FOLHAS_SO) { FOLHAS_SO = null; atualizar(); } }
 
 function gerarPdfDaAba(aba) {
-  FOLHAS_SO = FOLHAS_DA_ABA_CS[aba] || null;
+  // só as folhas desta aba que o tipo de ensaio tem (a aba nunca imprime o laudo inteiro: ele sai na aba Resumo)
+  const doModo = FOLHAS_POR_MODO[estado.modo] || [];
+  const so = (FOLHAS_DA_ABA_CS[aba] || []).filter(k => doModo.includes(k));
+  if (!so.length) return;
+  FOLHAS_SO = so;
   atualizar();
   // no celular a impressão não segura o script: o relatório inteiro volta quando a impressão
   // termina (afterprint), ao trocar de aba ou ao pedir o relatório completo
@@ -13145,7 +13158,7 @@ function montarBotoesPdfAba() {
     // Identificação do ensaio de solos: só salvar (o PDF de cada parte sai na aba dela; o completo, no Histórico e no plano)
     if (ABAS_SO_SALVAR.includes(aba)) {
       el.innerHTML = `<div class="card pdf-aba"><h2>Salvar ensaio</h2>
-        <p class="hint" style="margin:0 0 12px">Guarda o ensaio e manda para a equipe. O PDF sai na aba de cada parte (Boletim, Granulometria…) e o completo no Histórico.</p>
+        <p class="hint" style="margin:0 0 12px">Guarda o ensaio e manda para a equipe. O PDF de cada parte sai na aba dela; o laudo completo, só na aba <b>Resumo</b>.</p>
         <div class="rasc-botoes"><button class="btn" type="button" data-salvaraba="1">Salvar ensaio</button></div>
         <div data-salvoaba="1" style="margin-top:10px"></div><div data-aprovaba="1"></div></div>`;
       el.querySelector('[data-salvaraba]').addEventListener('click', () => {
@@ -28047,7 +28060,10 @@ function imprimirRelatorio(depois) {
 // o listener recebe o evento do clique; passá-lo adiante faria `depois()`
 // tentar chamar um MouseEvent e estourar logo depois da impressão
 $('btnWhatsapp').addEventListener('click', () => enviarPdfWhatsapp());
-['btnImprimir', 'btnImprimirSondagem', 'btnRelatorio', 'btnRelatorio2'].forEach(id =>
+// o PDF da aba In situ é só a folha dela; o laudo inteiro sai na aba Resumo
+$('btnImprimir').addEventListener('click', () => gerarPdfDaAba('insitu'));
+$('btnImprimirSondagem').addEventListener('click', () => gerarPdfDaAba('sondagem'));
+['btnRelatorio2'].forEach(id =>
   $(id).addEventListener('click', () => { voltarRelatorioInteiro(); imprimirRelatorio(); }));
 
 $('btnAddFuro').addEventListener('click', () => {
